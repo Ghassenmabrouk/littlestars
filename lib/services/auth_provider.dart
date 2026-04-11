@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import '../models/models.dart';
 import '../services/api_service.dart';
 
@@ -24,7 +25,15 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await ApiService.login(login, password);
+      // Get FCM token if available
+      String? fcmToken;
+      try {
+        fcmToken = await FirebaseMessaging.instance.getToken();
+      } catch (e) {
+        print('Could not get FCM token: $e');
+      }
+
+      final response = await ApiService.login(login, password, fcmToken: fcmToken);
 
       if (response['success'] == true) {
         try {

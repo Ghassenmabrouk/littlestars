@@ -11,15 +11,21 @@ class ApiService {
   static const String apiPrefix = '$baseUrl/api';
 
   /// Parent Login
-  static Future<Map<String, dynamic>> login(String login, String password) async {
+  static Future<Map<String, dynamic>> login(String login, String password, {String? fcmToken}) async {
     try {
+      final payload = {
+        'login': login,
+        'password': password,
+      };
+      
+      if (fcmToken != null) {
+        payload['fcm_token'] = fcmToken;
+      }
+      
       final response = await http.post(
         Uri.parse('$baseUrl/login_api.php'),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'login': login,
-          'password': password,
-        }),
+        body: jsonEncode(payload),
       ).timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {

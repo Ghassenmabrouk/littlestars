@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'services/auth_provider.dart';
 import 'services/notification_provider.dart';
+import 'services/fcm_service.dart';
 import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/register_screen.dart';
@@ -13,7 +15,12 @@ import 'models/models.dart';
 import 'localization/app_strings.dart';
 import 'theme/kg_theme.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  if (Firebase.apps.isEmpty) {
+    await Firebase.initializeApp();
+  }
+  await FCMService().initialize();
   runApp(const MyApp());
 }
 
