@@ -1,6 +1,4 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -8,8 +6,6 @@ import 'dart:convert';
 class FCMService {
   static final FCMService _instance = FCMService._internal();
   static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-  
-  late FlutterLocalNotificationsPlugin _localNotifications;
 
   factory FCMService() {
     return _instance;
@@ -24,9 +20,6 @@ class FCMService {
       badge: true,
       sound: true,
     );
-
-    // Initialize local notifications
-    _initializeLocalNotifications();
 
     // Get FCM token and save it
     String? token = await _firebaseMessaging.getToken();
@@ -61,77 +54,16 @@ class FCMService {
     });
   }
 
-  void _initializeLocalNotifications() {
-    const AndroidInitializationSettings androidInitSettings =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    
-    const DarwinInitializationSettings iosInitSettings =
-        DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-    );
-
-    const InitializationSettings initSettings = InitializationSettings(
-      android: androidInitSettings,
-      iOS: iosInitSettings,
-    );
-
-    _localNotifications = FlutterLocalNotificationsPlugin();
-    _localNotifications.initialize(initSettings);
-  }
-
   Future<void> _handleForegroundMessage(RemoteMessage message) async {
-    print('Foreground message: ${message.messageId}');
+    print('Foreground message received: ${message.messageId}');
     print('Title: ${message.notification?.title}');
     print('Body: ${message.notification?.body}');
-
-    // Show local notification
-    await _showLocalNotification(
-      title: message.notification?.title ?? 'Notification',
-      body: message.notification?.body ?? '',
-      data: message.data,
-    );
+    // Firebase displays system notification automatically for foreground messages
   }
 
   void _handleMessageOpenedApp(RemoteMessage message) {
     print('Message opened app: ${message.messageId}');
-    // TODO: Navigate to appropriate screen based on message data
-  }
-
-  Future<void> _showLocalNotification({
-    required String title,
-    required String body,
-    Map<String, dynamic>? data,
-  }) async {
-    const AndroidNotificationDetails androidDetails =
-        AndroidNotificationDetails(
-      'notifications_channel',
-      'Notifications',
-      channelDescription: 'Notifications from Jardin Enfant',
-      importance: Importance.max,
-      priority: Priority.high,
-      showWhen: true,
-    );
-
-    const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
-      presentAlert: true,
-      presentBadge: true,
-      presentSound: true,
-    );
-
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(
-      android: androidDetails,
-      iOS: iosDetails,
-    );
-
-    await _localNotifications.show(
-      DateTime.now().millisecond,
-      title,
-      body,
-      platformChannelSpecifics,
-      payload: data != null ? data.toString() : null,
-    );
+    // Notification tapped - could navigate to relevant screen based on message.data
   }
 
   Future<String?> getToken() async {
