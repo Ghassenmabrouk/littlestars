@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:provider/provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -11,9 +10,6 @@ import '../theme/kg_theme.dart';
 import 'attendance_history_screen.dart';
 import 'absence_history_screen.dart';
 import 'messaging_screen.dart';
-
-// Web-only import - only for browser downloads
-import 'dart:html' as html show Blob, Url, AnchorElement;
 
 class ChildDetailsScreen extends StatefulWidget {
   final Map<String, dynamic> child;
@@ -918,26 +914,13 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
   }
 
   void _downloadFile(List<int> bytes, String filename) {
-    // Web-only download functionality
-    if (kIsWeb) {
-      try {
-        final blob = html.Blob([bytes]);
-        final url = html.Url.createObjectUrlFromBlob(blob);
-        
-        final anchor = html.AnchorElement(href: url)
-          ..setAttribute('download', filename)
-          ..click();
-        
-        html.Url.revokeObjectUrl(url);
-      } catch (e) {
-        print('Download error: $e');
-      }
-    } else {
-      // For mobile, show a message instead
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Download available on web version')),
-      );
-    }
+    // Download is only supported on web version
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('PDF download available on web version only'),
+        duration: Duration(seconds: 3),
+      ),
+    );
   }
 
   void _downloadReceipt(Map<String, dynamic> receipt) async {
