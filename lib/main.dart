@@ -29,6 +29,7 @@ void main() async {
   } catch (e) {
     print('[MAIN] ERROR during initialization: $e');
     print('[MAIN] Stack trace: ${StackTrace.current}');
+    print('[MAIN] App will continue anyway (FCM not available)');
   }
   runApp(const MyApp());
 }
