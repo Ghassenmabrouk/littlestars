@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:333316942144:android:8510473e34dbec3d38b2a5",
+        "android_client_info": {
+          "package_name": "com.example.jardin_enfant_parent"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvh94Mgiba1Vd9y5AfH3CugX2gx1yHo60"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:333316942144:android:8d7e7658031c7a0f38b2a5",
         "android_client_info": {
           "package_name": "littlestars.com"
