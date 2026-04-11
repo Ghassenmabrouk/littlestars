@@ -23,7 +23,6 @@ class FCMService {
       alert: true,
       announcement: false,
       badge: true,
-      carryForward: true,
       critical: false,
       provisional: false,
       sound: true,
