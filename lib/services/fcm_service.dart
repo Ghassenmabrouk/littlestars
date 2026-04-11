@@ -21,10 +21,7 @@ class FCMService {
     // Request notification permission
     await _firebaseMessaging.requestPermission(
       alert: true,
-      announcement: false,
       badge: true,
-      critical: false,
-      provisional: false,
       sound: true,
     );
 
