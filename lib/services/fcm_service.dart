@@ -82,7 +82,7 @@ class FCMService {
       }
 
       // Call backend API to save token
-      final url = Uri.parse('http://192.168.1.104/jardin_enfant_ghofrane/save_fcm_token_api.php');
+      final url = Uri.parse('http://192.168.1.21/jardin_enfant_ghofrane/save_fcm_token_api.php');
       
       final response = await http.post(
         url,
