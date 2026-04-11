@@ -14,44 +14,60 @@ class FCMService {
   FCMService._internal();
 
   Future<void> initialize() async {
-    // Request notification permission
-    await _firebaseMessaging.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+    try {
+      // Request notification permission
+      print('[FCM] Requesting notification permissions...');
+      await _firebaseMessaging.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+      print('[FCM] Notification permissions granted');
 
-    // Get FCM token and save it
-    String? token = await _firebaseMessaging.getToken();
-    if (token != null) {
-      print('FCM Token: $token');
-      // Save token after a small delay to ensure user context is available
-      Future.delayed(const Duration(seconds: 1), () async {
+      // Get FCM token and save it
+      print('[FCM] Getting FCM token...');
+      String? token = await _firebaseMessaging.getToken();
+      if (token != null) {
+        print('[FCM] Token obtained: $token');
+        // Save token after a small delay to ensure user context is available
+        Future.delayed(const Duration(seconds: 1), () async {
+          await _saveFCMTokenToDatabase(token);
+        });
+      } else {
+        print('[FCM] WARNING: Could not obtain FCM token');
+      }
+
+      // Handle foreground messages
+      print('[FCM] Setting up foreground message handler...');
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        _handleForegroundMessage(message);
+      });
+
+      // Handle background messages
+      print('[FCM] Setting up message opened handler...');
+      FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+        _handleMessageOpenedApp(message);
+      });
+
+      // Handle terminated state messages
+      print('[FCM] Checking for initial message...');
+      final initialMessage = await _firebaseMessaging.getInitialMessage();
+      if (initialMessage != null) {
+        _handleMessageOpenedApp(initialMessage);
+      }
+
+      // Listen for token refresh
+      print('[FCM] Setting up token refresh listener...');
+      _firebaseMessaging.onTokenRefresh.listen((String token) async {
+        print('[FCM] Token refreshed: $token');
         await _saveFCMTokenToDatabase(token);
       });
+      
+      print('[FCM] Initialization complete!');
+    } catch (e) {
+      print('[FCM] ERROR during initialization: $e');
+      print('[FCM] Stack trace: ${StackTrace.current}');
     }
-
-    // Handle foreground messages
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      _handleForegroundMessage(message);
-    });
-
-    // Handle background messages
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      _handleMessageOpenedApp(message);
-    });
-
-    // Handle terminated state messages
-    final initialMessage = await _firebaseMessaging.getInitialMessage();
-    if (initialMessage != null) {
-      _handleMessageOpenedApp(initialMessage);
-    }
-
-    // Listen for token refresh
-    _firebaseMessaging.onTokenRefresh.listen((String token) async {
-      print('FCM Token refreshed: $token');
-      await _saveFCMTokenToDatabase(token);
-    });
   }
 
   Future<void> _handleForegroundMessage(RemoteMessage message) async {

@@ -17,10 +17,19 @@ import 'theme/kg_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (Firebase.apps.isEmpty) {
-    await Firebase.initializeApp();
+  try {
+    if (Firebase.apps.isEmpty) {
+      print('[MAIN] Initializing Firebase...');
+      await Firebase.initializeApp();
+      print('[MAIN] Firebase initialized successfully');
+    }
+    print('[MAIN] Initializing FCM Service...');
+    await FCMService().initialize();
+    print('[MAIN] FCM Service initialized successfully');
+  } catch (e) {
+    print('[MAIN] ERROR during initialization: $e');
+    print('[MAIN] Stack trace: ${StackTrace.current}');
   }
-  await FCMService().initialize();
   runApp(const MyApp());
 }
 
