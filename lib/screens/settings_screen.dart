@@ -15,8 +15,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _isSaving = false;
 
   final List<Map<String, String>> _presets = [
-    {'name': 'BlueStacks (Default)', 'url': 'http://10.0.0.2/jardin_enfant_ghofrane'},
     {'name': 'Physical Device (Home WiFi)', 'url': 'http://192.168.1.21/jardin_enfant_ghofrane'},
+    {'name': 'BlueStacks', 'url': 'http://10.0.0.2/jardin_enfant_ghofrane'},
     {'name': 'Custom', 'url': ''},
   ];
 
