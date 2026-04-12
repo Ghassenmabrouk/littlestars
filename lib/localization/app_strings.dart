@@ -1,7 +1,7 @@
 /// French localization strings for the app
 class AppStrings {
   // App name
-  static const String appTitle = "Jardin d'Enfant Parent";
+  static const String appTitle = "Little Stars Parent";
 
   // Auth strings
   static const String login = "Connexion";

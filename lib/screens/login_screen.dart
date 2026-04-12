@@ -98,28 +98,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
-                    child: const Icon(
-                      Icons.child_care_rounded,
-                      size: 54,
-                      color: KG.primary,
+                    child: const Center(
+                      child: Text('⭐', style: TextStyle(fontSize: 54)),
                     ),
                   ),
                   const SizedBox(height: 18),
                   const Text(
-                    'Jardin d\'Enfant',
+                    'Little Stars',
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                       letterSpacing: 0.5,
-                    ),
-                  ),
-                  const Text(
-                    'Ghofrane',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white70,
-                      fontWeight: FontWeight.w300,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -130,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: const Text(
-                      '🌸  Portail Parent',
+                      '🌸  Parent Portal',
                       style: TextStyle(fontSize: 13, color: Colors.white),
                     ),
                   ),
@@ -295,55 +285,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Google Sign-In button
-                  Consumer<AuthProvider>(
-                    builder: (context, auth, _) {
-                      return SizedBox(
-                        height: 52,
-                        child: ElevatedButton.icon(
-                          onPressed: auth.isLoading
-                              ? null
-                              : () async {
-                                  auth.clearError();
-                                  final ok = await auth.loginWithGoogle();
-                                  if (ok && mounted) {
-                                    Navigator.of(context)
-                                        .pushReplacementNamed('/home');
-                                  }
-                                },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFFDB4437),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14),
-                            ),
-                          ),
-                          icon: auth.isLoading
-                              ? const SizedBox.shrink()
-                              : Text('G', style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
-                          label: auth.isLoading
-                              ? const SizedBox(
-                                  width: 22,
-                                  height: 22,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Colors.white,
-                                  ),
-                                )
-                              : const Text(
-                                  'Sign in with Google',
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 0.5,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                        ),
-                      );
-                    },
                   ),
                   const SizedBox(height: 28),
                   Row(
