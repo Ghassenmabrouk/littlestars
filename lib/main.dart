@@ -6,10 +6,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'services/auth_provider.dart';
 import 'services/notification_provider.dart';
 import 'services/fcm_service.dart';
+import 'services/api_service.dart';
 import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/register_screen.dart';
 import 'screens/notifications_screen.dart';
+import 'screens/settings_screen.dart';
 import 'screens/child_attendance_screen.dart';
 import 'screens/attendance_history_screen.dart';
 import 'screens/absence_history_screen.dart';
@@ -26,6 +28,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   try {
+    // Initialize API service first (loads base URL from SharedPreferences)
+    print('[MAIN] Initializing API Service...');
+    await ApiService.init();
+    print('[MAIN] API Service initialized with baseUrl: ${ApiService.baseUrl}');
+    
     // Only initialize Firebase on mobile platforms
     // Web has compatibility issues with firebase_messaging
     if (!kIsWeb) {
@@ -67,6 +74,7 @@ class MyApp extends StatelessWidget {
           '/register': (context) => const RegisterScreen(),
           '/home': (context) => const HomeScreen(),
           '/notifications': (context) => const NotificationsScreen(),
+          '/settings': (context) => const SettingsScreen(),
         },
         onGenerateRoute: (settings) {
           // Handle routes with parameters

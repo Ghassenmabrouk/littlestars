@@ -1,14 +1,17 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'settings_service.dart';
 
 class ApiService {
-  // Use your machine's local IP for physical devices
-  static const String baseUrl = 'http://192.168.1.21/jardin_enfant_ghofrane';
+  // Dynamic base URL - loaded from SharedPreferences
+  static late String baseUrl;
   
-  // For Android emulator, use: 'http://10.0.2.2/jardin_enfant_ghofrane'
-  // For physical device, use your machine's local IP: 'http://192.168.1.21/jardin_enfant_ghofrane'
+  // Initialize base URL from settings (call this in main())
+  static Future<void> init() async {
+    baseUrl = await SettingsService.getBaseUrl();
+  }
 
-  static const String apiPrefix = '$baseUrl/api';
+  static String get apiPrefix => '$baseUrl/api';
 
   /// Parent Login
   static Future<Map<String, dynamic>> login(String login, String password, {String? fcmToken}) async {

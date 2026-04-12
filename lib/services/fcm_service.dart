@@ -3,6 +3,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'api_service.dart';
+import 'settings_service.dart';
 
 class FCMService {
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -123,7 +125,7 @@ class FCMService {
       }
 
       // Call backend API to save token
-      final url = Uri.parse('http://192.168.1.21/jardin_enfant_ghofrane/save_fcm_token_api.php');
+      final url = Uri.parse('${ApiService.baseUrl}/save_fcm_token_api.php');
       
       final response = await http.post(
         url,
