@@ -164,7 +164,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey[300]!),
                 borderRadius: BorderRadius.circular(8),
-                backgroundColor: Colors.grey[100],
+                color: Colors.grey[100],
               ),
               child: Text(
                 ApiService.baseUrl,
