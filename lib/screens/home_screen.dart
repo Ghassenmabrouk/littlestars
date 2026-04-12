@@ -84,18 +84,19 @@ class _HomeScreenState extends State<HomeScreen> {
               final unreadCount = notifProvider.unreadCount;
               return Stack(
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.notifications_outlined),
-                    tooltip: 'Notifications',
-                    onPressed: () {
-                      // Navigate to notifications, it will fetch data in initState
+                  GestureDetector(
+                    onTap: () {
                       Navigator.of(context).pushNamed('/notifications');
                     },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('🔔', style: const TextStyle(fontSize: 24)),
+                    ),
                   ),
                   if (unreadCount > 0)
                     Positioned(
-                      right: 8,
-                      top: 8,
+                      right: 0,
+                      top: 0,
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
@@ -116,20 +117,22 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
           ),
-          IconButton(
-            icon: const Icon(Icons.settings_rounded),
-            tooltip: 'Paramètres',
-            onPressed: () {
-              Navigator.of(context).pushNamed('/settings');
-            },
+          GestureDetector(
+            onTap: () => Navigator.of(context).pushNamed('/settings'),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('⚙️', style: const TextStyle(fontSize: 24)),
+            ),
           ),
-          IconButton(
-            icon: const Icon(Icons.logout_rounded),
-            tooltip: 'Déconnexion',
-            onPressed: () {
+          GestureDetector(
+            onTap: () {
               context.read<AuthProvider>().logout();
               Navigator.of(context).pushReplacementNamed('/login');
             },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('🚪', style: const TextStyle(fontSize: 24)),
+            ),
           ),
         ],
       ),
@@ -144,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SizedBox(height: 60),
-                      const Icon(Icons.child_care, size: 100, color: KG.primary),
+                      Text('👶', style: const TextStyle(fontSize: 100, color: KG.primary)),
                       const SizedBox(height: 24),
                       Text(
                         'Bienvenue, ${authProvider.user?.nomComplet}!',
@@ -173,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         child: Column(
                           children: [
-                            const Icon(Icons.info_outline_rounded, size: 32, color: KG.primary),
+                            Text('ℹ️', style: const TextStyle(fontSize: 32, color: KG.primary)),
                             const SizedBox(height: 12),
                             Text(
                               'Commencez par ajouter votre premier enfant',
@@ -201,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: double.infinity,
                         height: 56,
                         child: ElevatedButton.icon(
-                          icon: const Icon(Icons.add),
+                          icon: const Text('➕', style: TextStyle(fontSize: 20)),
                           label: const Text(
                             'Ajouter un enfant',
                             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -348,7 +351,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Row(
                             children: [
-                              const Icon(Icons.person_rounded, color: KG.primary, size: 32),
+                              Text('👤', style: const TextStyle(color: KG.primary, fontSize: 32)),
                               const SizedBox(width: 12),
                               Expanded(
                                 child: Column(
@@ -369,7 +372,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ],
                                 ),
                               ),
-                              const Icon(Icons.arrow_forward_ios_rounded, color: KG.primary, size: 18),
+                              Text('→', style: const TextStyle(color: KG.primary, fontSize: 18)),
                             ],
                           ),
                           const SizedBox(height: 12),
