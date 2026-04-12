@@ -434,7 +434,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       child: Row(
                                         children: [
                                           Text('🍽️',
-                                              size: 18, color: Colors.orange),
+                                              style: const TextStyle(fontSize: 18, color: Colors.orange)),
                                           SizedBox(width: 8),
                                           Text('Déjeuner: Pris'),
                                         ],
