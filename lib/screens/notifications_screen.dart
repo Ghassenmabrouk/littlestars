@@ -29,10 +29,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('📬 Notifications'),
+        title: const Text('Notifications'),
         elevation: 0,
         backgroundColor: KG.primary,
         foregroundColor: Colors.white,
+        leading: const Icon(Icons.notifications),
       ),
       body: Consumer<NotificationProvider>(
         builder: (context, provider, child) {
@@ -119,9 +120,12 @@ class NotificationCard extends StatelessWidget {
       case 'message':
         return Icons.message_rounded;
       case 'invoice':
-        return Icons.receipt;
+        return Icons.receipt_long;
       case 'attendance':
         return Icons.warning_rounded;
+      case 'announcement':
+      case 'notification':
+        return Icons.campaign;
       default:
         return Icons.notifications;
     }
@@ -153,9 +157,10 @@ class NotificationCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Center(
-                child: Text(
-                  notification.icon,
-                  style: const TextStyle(fontSize: 24),
+                child: Icon(
+                  _getTypeIcon(notification.type),
+                  size: 24,
+                  color: _getPriorityColor(notification.priority),
                 ),
               ),
             ),

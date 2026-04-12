@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../models/models.dart';
 import '../services/api_service.dart';
 
@@ -49,7 +50,13 @@ class AuthProvider extends ChangeNotifier {
           // Save credentials locally ONLY if rememberMe is enabled
           final prefs = await SharedPreferences.getInstance();
           await prefs.setInt('user_id', _user!.id);
+          await prefs.setInt('parent_id', _user!.id);
           await prefs.setString('user_name', _user!.nomComplet);
+
+          if (fcmToken != null) {
+            final saveTokenResponse = await ApiService.saveFcmToken(_user!.id, fcmToken);
+            print('Save FCM token after login response: $saveTokenResponse');
+          }
           
           if (rememberMe) {
             await prefs.setString('login', login);
@@ -87,11 +94,100 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  /// Login user with Google Sign-In
+  Future<bool> loginWithGoogle() async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+      if (googleUser == null) {
+        _errorMessage = 'Google sign-in cancelled';
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+
+      // Get FCM token if available
+      String? fcmToken;
+      try {
+        fcmToken = await FirebaseMessaging.instance.getToken();
+      } catch (e) {
+        print('Could not get FCM token: $e');
+      }
+
+      // Use Google email as login, Google display name as password placeholder
+      final response = await ApiService.login(
+        googleUser.email, 
+        googleUser.displayName ?? 'google_user',
+        fcmToken: fcmToken
+      );
+
+      if (response['success'] == true) {
+        try {
+          _user = User.fromJson(response['user'] ?? {});
+          
+          // Parse children from response
+          if (response['children'] is List) {
+            _children = (response['children'] as List)
+                .map((child) => Child.fromJson(child as Map<String, dynamic>))
+                .toList();
+          }
+
+          // Save user info locally (don't save password for Google sign-in)
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setInt('user_id', _user!.id);
+          await prefs.setInt('parent_id', _user!.id);
+          await prefs.setString('user_name', _user!.nomComplet);
+          await prefs.setBool('is_google_signin', true);
+          
+          if (fcmToken != null) {
+            final saveTokenResponse = await ApiService.saveFcmToken(_user!.id, fcmToken);
+            print('Save FCM token after Google sign-in response: $saveTokenResponse');
+          }
+
+          _isLoading = false;
+          notifyListeners();
+          return true;
+        } catch (parseError) {
+          _errorMessage = 'Error parsing response: $parseError';
+          _isLoading = false;
+          notifyListeners();
+          return false;
+        }
+      } else {
+        _errorMessage = response['message'] ?? 'Google sign-in failed';
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+    } catch (e) {
+      _errorMessage = 'Google sign-in error: $e';
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
   /// Logout user
   Future<void> logout() async {
     _user = null;
     _children = [];
     final prefs = await SharedPreferences.getInstance();
+    final isGoogleSignIn = prefs.getBool('is_google_signin') ?? false;
+    
+    // Sign out from Google if that's how they signed in
+    if (isGoogleSignIn) {
+      try {
+        await GoogleSignIn().signOut();
+      } catch (e) {
+        print('Error signing out from Google: $e');
+      }
+    }
+    
     await prefs.clear();
     notifyListeners();
   }

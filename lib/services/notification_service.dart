@@ -3,10 +3,9 @@ import 'api_service.dart';
 
 class AppNotification {
   final String id;
-  final String type; // 'message', 'invoice', 'attendance'
+  final String type; // 'message', 'invoice', 'attendance', 'announcement'
   final String title;
   final String message;
-  final String icon;
   final int count;
   final String priority; // 'high', 'medium', 'low'
   final DateTime createdAt;
@@ -17,7 +16,6 @@ class AppNotification {
     required this.type,
     required this.title,
     required this.message,
-    required this.icon,
     required this.count,
     required this.priority,
     DateTime? createdAt,
@@ -25,13 +23,17 @@ class AppNotification {
   }) : createdAt = createdAt ?? DateTime.now();
 
   factory AppNotification.fromJson(Map<String, dynamic> json) {
+    final rawCount = json['count'];
+    final parsedCount = rawCount is int
+        ? rawCount
+        : (int.tryParse(rawCount?.toString() ?? '') ?? 1);
+
     return AppNotification(
       id: json['id'] ?? '',
       type: json['type'] ?? 'unknown',
       title: json['title'] ?? '',
       message: json['message'] ?? '',
-      icon: json['icon'] ?? '📬',
-      count: json['count'] ?? 0,
+      count: parsedCount > 0 ? parsedCount : 1,
       priority: json['priority'] ?? 'medium',
     );
   }

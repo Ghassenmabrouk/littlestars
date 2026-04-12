@@ -1,9 +1,11 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 class FCMService {
+  static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   static final FCMService _instance = FCMService._internal();
   static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
@@ -14,6 +16,12 @@ class FCMService {
   FCMService._internal();
 
   Future<void> initialize() async {
+    // Initialize flutter_local_notifications (v21.x API)
+    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
+    await flutterLocalNotificationsPlugin.initialize(
+      settings: initializationSettings,
+    );
     try {
       // Request notification permission
       print('[FCM] Requesting notification permissions...');
@@ -74,7 +82,24 @@ class FCMService {
     print('Foreground message received: ${message.messageId}');
     print('Title: ${message.notification?.title}');
     print('Body: ${message.notification?.body}');
-    // Firebase displays system notification automatically for foreground messages
+    // Show a local notification for foreground messages
+    if (message.notification != null) {
+      const AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'default_channel_id',
+        'Default',
+        channelDescription: 'Default channel for notifications',
+        importance: Importance.max,
+        priority: Priority.high,
+        showWhen: false,
+      );
+      const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
+      await flutterLocalNotificationsPlugin.show(
+        id: 0,
+        title: message.notification!.title,
+        body: message.notification!.body,
+        notificationDetails: platformChannelSpecifics,
+      );
+    }
   }
 
   void _handleMessageOpenedApp(RemoteMessage message) {

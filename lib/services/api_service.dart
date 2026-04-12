@@ -69,6 +69,34 @@ class ApiService {
     }
   }
 
+  /// Save FCM token for a parent after login or token refresh
+  static Future<Map<String, dynamic>> saveFcmToken(int parentId, String fcmToken) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/save_fcm_token_api.php'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'parent_id': parentId,
+          'fcm_token': fcmToken,
+        }),
+      ).timeout(const Duration(seconds: 30));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        return {
+          'success': false,
+          'message': 'Failed to save FCM token: ${response.statusCode}'
+        };
+      }
+    } catch (e) {
+      return {
+        'success': false,
+        'message': 'Connection error: $e'
+      };
+    }
+  }
+
   /// Add child
   static Future<Map<String, dynamic>> addChild(String userEmail, Map<String, dynamic> childData) async {
     try {

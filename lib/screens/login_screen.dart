@@ -272,7 +272,55 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 16),
 
+                  // Google Sign-In button
+                  Consumer<AuthProvider>(
+                    builder: (context, auth, _) {
+                      return SizedBox(
+                        height: 52,
+                        child: ElevatedButton.icon(
+                          onPressed: auth.isLoading
+                              ? null
+                              : () async {
+                                  auth.clearError();
+                                  final ok = await auth.loginWithGoogle();
+                                  if (ok && mounted) {
+                                    Navigator.of(context)
+                                        .pushReplacementNamed('/home');
+                                  }
+                                },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFDB4437),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                          ),
+                          icon: auth.isLoading
+                              ? const SizedBox.shrink()
+                              : const Icon(Icons.g_mobiledata, size: 24),
+                          label: auth.isLoading
+                              ? const SizedBox(
+                                  width: 22,
+                                  height: 22,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : const Text(
+                                  'Sign in with Google',
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 0.5,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                        ),
+                      );
+                    },
+                  ),
                   const SizedBox(height: 28),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

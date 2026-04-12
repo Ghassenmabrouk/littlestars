@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'services/auth_provider.dart';
 import 'services/notification_provider.dart';
 import 'services/fcm_service.dart';
@@ -15,17 +17,29 @@ import 'models/models.dart';
 import 'localization/app_strings.dart';
 import 'theme/kg_theme.dart';
 
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print('[FCM] Background message received: ${message.messageId}');
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   try {
-    if (Firebase.apps.isEmpty) {
-      print('[MAIN] Initializing Firebase...');
-      await Firebase.initializeApp();
-      print('[MAIN] Firebase initialized successfully');
+    // Only initialize Firebase on mobile platforms
+    // Web has compatibility issues with firebase_messaging
+    if (!kIsWeb) {
+      if (Firebase.apps.isEmpty) {
+        print('[MAIN] Initializing Firebase...');
+        await Firebase.initializeApp();
+        print('[MAIN] Firebase initialized successfully');
+      }
+      print('[MAIN] Initializing FCM Service...');
+      await FCMService().initialize();
+      print('[MAIN] FCM Service initialized successfully');
+    } else {
+      print('[MAIN] Running on web - skipping Firebase initialization');
     }
-    print('[MAIN] Initializing FCM Service...');
-    await FCMService().initialize();
-    print('[MAIN] FCM Service initialized successfully');
   } catch (e) {
     print('[MAIN] ERROR during initialization: $e');
     print('[MAIN] Stack trace: ${StackTrace.current}');
