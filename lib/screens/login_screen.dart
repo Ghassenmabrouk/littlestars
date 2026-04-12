@@ -60,12 +60,27 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         child: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 40),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+          child: Stack(
+            children: [
+              // Settings button in top-right
+              Positioned(
+                top: 0,
+                right: 0,
+                child: IconButton(
+                  icon: const Icon(Icons.settings_rounded, color: Colors.white),
+                  tooltip: 'Paramètres',
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/settings');
+                  },
+                ),
+              ),
+              // Main login form
+              Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 40),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
                   // Logo
                   Container(
                     width: 96,
@@ -172,9 +187,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.next,
                           style: const TextStyle(color: KG.textDark, fontSize: 15),
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             labelText: AppStrings.login_field,
-                            prefixIcon: Icon(Icons.person_outline_rounded),
+                            prefixIcon: const Icon(
+                              Icons.person_outline_rounded,
+                              color: KG.primary,
+                            ),
+                            prefixIconColor: KG.primary,
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -187,13 +206,17 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: const TextStyle(color: KG.textDark, fontSize: 15),
                           decoration: InputDecoration(
                             labelText: AppStrings.password,
-                            prefixIcon: const Icon(Icons.lock_outline_rounded),
+                            prefixIcon: const Icon(
+                              Icons.lock_outline_rounded,
+                              color: KG.primary,
+                            ),
+                            prefixIconColor: KG.primary,
                             suffixIcon: IconButton(
                               icon: Icon(
                                 _obscurePassword
                                     ? Icons.visibility_off_outlined
                                     : Icons.visibility_outlined,
-                                color: KG.textMuted,
+                                color: KG.primary,
                               ),
                               onPressed: () =>
                                   setState(() => _obscurePassword = !_obscurePassword),
@@ -346,6 +369,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
             ),
+            ],
           ),
         ),
       ),
