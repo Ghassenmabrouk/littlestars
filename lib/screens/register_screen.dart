@@ -197,6 +197,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: Text('👤', style: const TextStyle(fontSize: 20)),
                   ),
                   prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+                ),
+                onChanged: (value) => _parentNom = value,
                 validator: (value) {
                   if (value?.isEmpty ?? true) return 'Le nom est requis';
                   return null;
