@@ -62,12 +62,12 @@ class _LoginScreenState extends State<LoginScreen> {
         child: SafeArea(
           child: Stack(
             children: [
-              // Settings button in top-right
+              // Settings button in top-left
               Positioned(
                 top: 0,
-                right: 0,
+                left: 0,
                 child: IconButton(
-                  icon: const Icon(Icons.settings_rounded, color: Colors.white),
+                  icon: const Icon(Icons.settings_rounded, color: Colors.white, size: 28),
                   tooltip: 'Paramètres',
                   onPressed: () {
                     Navigator.of(context).pushNamed('/settings');
@@ -192,6 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             prefixIcon: const Icon(
                               Icons.person_outline_rounded,
                               color: KG.primary,
+                              size: 24,
                             ),
                             prefixIconColor: KG.primary,
                           ),
@@ -209,6 +210,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             prefixIcon: const Icon(
                               Icons.lock_outline_rounded,
                               color: KG.primary,
+                              size: 24,
                             ),
                             prefixIconColor: KG.primary,
                             suffixIcon: IconButton(
@@ -217,6 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ? Icons.visibility_off_outlined
                                     : Icons.visibility_outlined,
                                 color: KG.primary,
+                                size: 24,
                               ),
                               onPressed: () =>
                                   setState(() => _obscurePassword = !_obscurePassword),
