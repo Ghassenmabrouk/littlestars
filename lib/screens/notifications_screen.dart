@@ -48,11 +48,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.notifications_none,
-                    size: 64,
-                    color: Colors.grey[400],
-                  ),
+                  Text('🔔', style: TextStyle(fontSize: 64, color: Colors.grey[400])),
                   const SizedBox(height: 16),
                   Text(
                     'No Notifications',

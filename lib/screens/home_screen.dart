@@ -412,20 +412,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                   _buildStatusRow(
                                     'État',
                                     todayStatus!['statut'] ?? 'Non marqué',
-                                    Icons.info,
+                                    'ℹ️',
                                   ),
                                   const SizedBox(height: 12),
                                   if (todayStatus!['heure_arrivee'] != null)
                                     _buildStatusRow(
                                       'Heure d\'Arrivée',
                                       todayStatus!['heure_arrivee'],
-                                      Icons.login,
+                                      '📥',
                                     ),
                                   if (todayStatus!['heure_depart'] != null)
                                     _buildStatusRow(
                                       'Heure de Départ',
                                       todayStatus!['heure_depart'],
-                                      Icons.logout,
+                                      '📤',
                                     ),
                                   if (todayStatus!['repas_midi'] == true ||
                                       todayStatus!['repas_midi'] == 1)
@@ -487,7 +487,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     _buildQuickActionCard(
                       'Profil Complet',
-                      Icons.person_outline_rounded,
+                      '👤',
                       KG.primary,
                       () {
                         Navigator.of(context).push(
@@ -499,7 +499,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     _buildQuickActionCard(
                       'Ajouter un Enfant',
-                      Icons.person_add,
+                      '➕',
                       Colors.green,
                       () {
                         Navigator.of(context).push(
@@ -517,7 +517,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     _buildQuickActionCard(
                       'Historique de Présence',
-                      Icons.calendar_today,
+                      '📅',
                       Colors.orange,
                       () {
                         final childData = {
@@ -539,7 +539,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     _buildQuickActionCard(
                       'Paramètres',
-                      Icons.settings,
+                      '⚙️',
                       Colors.purple,
                       () => ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -559,10 +559,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildStatusRow(String label, String value, IconData icon) {
+  Widget _buildStatusRow(String label, String value, String emoji) {
     return Row(
       children: [
-        Icon(icon, size: 20, color: KG.primary),
+        Text(emoji, style: const TextStyle(fontSize: 20, color: KG.primary)),
         const SizedBox(width: 12),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -583,7 +583,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildQuickActionCard(
     String title,
-    IconData icon,
+    String emoji,
     Color color,
     VoidCallback onTap,
   ) {
@@ -595,7 +595,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 40, color: color),
+            Text(emoji, style: TextStyle(fontSize: 40, color: color)),
             const SizedBox(height: 8),
             Text(
               title,
