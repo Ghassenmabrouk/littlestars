@@ -42,6 +42,13 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(childName),
+        leading: GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text('⬅️', style: TextStyle(fontSize: 24)),
+          ),
+        ),
       ),
       body: Column(
         children: [

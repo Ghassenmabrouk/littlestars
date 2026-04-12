@@ -53,6 +53,13 @@ class _AbsenceHistoryScreenState extends State<AbsenceHistoryScreen> {
       appBar: AppBar(
         title: const Text('Historique d\'absence'),
         elevation: 0,
+        leading: GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text('⬅️', style: TextStyle(fontSize: 24)),
+          ),
+        ),
       ),
       body: FutureBuilder<List<AbsenceRecord>>(
         future: _absenceHistory,

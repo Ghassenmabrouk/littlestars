@@ -184,6 +184,14 @@ class _MessagingScreenState extends State<MessagingScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
+                GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: const Padding(
+                    padding: EdgeInsets.all(4.0),
+                    child: Text('⬅️', style: TextStyle(fontSize: 24)),
+                  ),
+                ),
+                const SizedBox(width: 8),
                 const Text('💬', style: TextStyle(color: Colors.white, fontSize: 28)),
                 const SizedBox(width: 10),
                 const Expanded(

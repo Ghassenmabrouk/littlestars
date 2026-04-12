@@ -40,6 +40,13 @@ class _AddChildScreenState extends State<AddChildScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Ajouter un Enfant'),
+        leading: GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text('⬅️', style: TextStyle(fontSize: 24)),
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),

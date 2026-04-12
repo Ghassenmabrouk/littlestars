@@ -35,6 +35,13 @@ class _ChildAttendanceScreenState extends State<ChildAttendanceScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(childName),
+        leading: GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text('⬅️', style: TextStyle(fontSize: 24)),
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),

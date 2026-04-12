@@ -70,6 +70,13 @@ class _AttendanceHistoryScreenState extends State<AttendanceHistoryScreen> {
       appBar: AppBar(
         title: const Text('Historique de Présence'),
         elevation: 0,
+        leading: GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text('⬅️', style: TextStyle(fontSize: 24)),
+          ),
+        ),
       ),
       body: FutureBuilder<List<AttendanceRecord>>(
         future: _attendanceHistory,
