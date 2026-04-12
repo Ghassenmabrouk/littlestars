@@ -15,10 +15,11 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   int _selectedChildIndex = 0;
   Map<String, dynamic>? todayStatus;
   bool _loadingStatus = false;
+  late AnimationController _floatingController;
 
   @override
   void initState() {
@@ -29,10 +30,17 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     // Refresh notifications every 30 seconds
     Future.delayed(const Duration(seconds: 30), _refreshNotifications);
+    
+    // Floating animation
+    _floatingController = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    )..repeat(reverse: true);
   }
 
   @override
   void dispose() {
+    _floatingController.dispose();
     super.dispose();
   }
 
@@ -136,10 +144,67 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: Consumer<AuthProvider>(
-        builder: (context, authProvider, _) {
-          if (authProvider.children.isEmpty) {
-            return SingleChildScrollView(
+      body: Stack(
+        children: [
+          // Animated floating decorative elements
+          Positioned(
+            top: 20,
+            left: 20,
+            child: AnimatedBuilder(
+              animation: _floatingController,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(0, _floatingController.value * 15),
+                  child: Text('🎈', style: const TextStyle(fontSize: 28)),
+                );
+              },
+            ),
+          ),
+          Positioned(
+            top: 40,
+            right: 30,
+            child: AnimatedBuilder(
+              animation: _floatingController,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(0, -_floatingController.value * 20),
+                  child: Text('❤️', style: const TextStyle(fontSize: 24)),
+                );
+              },
+            ),
+          ),
+          Positioned(
+            bottom: 150,
+            left: 25,
+            child: AnimatedBuilder(
+              animation: _floatingController,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(0, _floatingController.value * 25),
+                  child: Text('🧸', style: const TextStyle(fontSize: 26)),
+                );
+              },
+            ),
+          ),
+          Positioned(
+            bottom: 100,
+            right: 20,
+            child: AnimatedBuilder(
+              animation: _floatingController,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(0, -_floatingController.value * 18),
+                  child: Text('🎀', style: const TextStyle(fontSize: 24)),
+                );
+              },
+            ),
+          ),
+          
+          // Main content
+          Consumer<AuthProvider>(
+            builder: (context, authProvider, _) {
+              if (authProvider.children.isEmpty) {
+                return SingleChildScrollView(
               child: Center(
                 child: Padding(
                   padding: const EdgeInsets.all(24),
@@ -555,6 +620,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         },
+      ),
+        ],
       ),
     );
   }

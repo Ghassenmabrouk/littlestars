@@ -221,7 +221,121 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
   }
 
   Widget _buildActivitiesTab(dynamic childId) {
-    return const Center(child: Text('Activities coming soon'));
+    return FutureBuilder<Map<String, dynamic>>(
+      future: ApiService.getChildActivities(int.parse(childId.toString())),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.hasError) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('❌', style: const TextStyle(fontSize: 48)),
+                const SizedBox(height: 16),
+                Text('Error: ${snapshot.error}'),
+              ],
+            ),
+          );
+        }
+
+        final data = snapshot.data ?? {};
+        final activities = data['data'] as List? ?? [];
+
+        if (activities.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('🎨', style: const TextStyle(fontSize: 48)),
+                const SizedBox(height: 16),
+                const Text('Aucune activité'),
+              ],
+            ),
+          );
+        }
+
+        return ListView.builder(
+          padding: const EdgeInsets.all(16),
+          itemCount: activities.length,
+          itemBuilder: (context, index) {
+            final activity = activities[index] as Map<String, dynamic>;
+            final title = activity['title'] ?? activity['nom'] ?? 'Sans titre';
+            final description = activity['description'] ?? activity['details'] ?? '';
+            final date = activity['date'] ?? activity['created_at'] ?? '';
+            final educator = activity['educator'] ?? activity['educateur'] ?? 'Éducateur';
+
+            return Card(
+              margin: const EdgeInsets.only(bottom: 12),
+              elevation: 2,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text('🎨', style: const TextStyle(fontSize: 24)),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                title,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              if (date.isNotEmpty)
+                                Text(
+                                  date,
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (description.isNotEmpty) ...[
+                      const SizedBox(height: 12),
+                      Text(
+                        description,
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                    ],
+                    if (educator.isNotEmpty) ...[
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          const Text('👩‍🏫 ', style: TextStyle(fontSize: 16)),
+                          Expanded(
+                            child: Text(
+                              educator,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   Widget _buildFeesTab(dynamic childId) {
