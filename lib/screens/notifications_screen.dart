@@ -33,7 +33,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         elevation: 0,
         backgroundColor: KG.primary,
         foregroundColor: Colors.white,
-        leading: const Icon(Icons.notifications),
+        leading: const Icon(Icons.notifications, color: Colors.white),
       ),
       body: Consumer<NotificationProvider>(
         builder: (context, provider, child) {

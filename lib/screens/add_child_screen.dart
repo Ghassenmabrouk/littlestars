@@ -52,7 +52,7 @@ class _AddChildScreenState extends State<AddChildScreen> {
                 decoration: InputDecoration(
                   labelText: 'Prénom',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                  prefixIcon: const Icon(Icons.person),
+                  prefixIcon: const Icon(Icons.person, color: KG.primary),
                 ),
                 onChanged: (value) => _prenom = value,
                 validator: (value) {
@@ -66,7 +66,7 @@ class _AddChildScreenState extends State<AddChildScreen> {
                 decoration: InputDecoration(
                   labelText: 'Nom',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                  prefixIcon: const Icon(Icons.person),
+                  prefixIcon: const Icon(Icons.person, color: KG.primary),
                 ),
                 onChanged: (value) => _nom = value,
                 validator: (value) {
@@ -80,10 +80,10 @@ class _AddChildScreenState extends State<AddChildScreen> {
                 decoration: InputDecoration(
                   labelText: 'Date de Naissance',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                  prefixIcon: const Icon(Icons.calendar_today),
+                  prefixIcon: const Icon(Icons.calendar_today, color: KG.primary),
                   hintText: 'AAAA-MM-JJ',
                   suffixIcon: IconButton(
-                    icon: const Icon(Icons.calendar_month),
+                    icon: const Icon(Icons.calendar_month, color: KG.primary),
                     onPressed: () => _selectDate(),
                   ),
                 ),

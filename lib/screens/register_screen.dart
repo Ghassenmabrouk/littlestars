@@ -65,7 +65,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 decoration: InputDecoration(
                   labelText: 'Identifiant',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                  prefixIcon: const Icon(Icons.person),
+                  prefixIcon: const Icon(Icons.person, color: KG.primary),
                 ),
                 onChanged: (value) => _login = value,
                 validator: (value) {
@@ -79,7 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 decoration: InputDecoration(
                   labelText: 'E-mail',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                  prefixIcon: const Icon(Icons.email),
+                  prefixIcon: const Icon(Icons.email, color: KG.primary),
                 ),
                 keyboardType: TextInputType.emailAddress,
                 onChanged: (value) => _email = value,
@@ -95,7 +95,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 decoration: InputDecoration(
                   labelText: 'Nom Complet',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                  prefixIcon: const Icon(Icons.person_outline),
+                  prefixIcon: const Icon(Icons.person_outline, color: KG.primary),
                 ),
                 onChanged: (value) => _nomComplet = value,
                 validator: (value) {
@@ -109,7 +109,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 decoration: InputDecoration(
                   labelText: 'Mot de Passe',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                  prefixIcon: const Icon(Icons.lock),
+                  prefixIcon: const Icon(Icons.lock, color: KG.primary),
                 ),
                 obscureText: true,
                 onChanged: (value) => _password = value,
@@ -125,7 +125,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 decoration: InputDecoration(
                   labelText: 'Confirmer le Mot de Passe',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                  prefixIcon: const Icon(Icons.lock_outline),
+                  prefixIcon: const Icon(Icons.lock_outline, color: KG.primary),
                 ),
                 obscureText: true,
                 onChanged: (value) => _confirmPassword = value,
@@ -158,7 +158,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 decoration: InputDecoration(
                   labelText: 'Prénom',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                  prefixIcon: const Icon(Icons.person_add),
+                  prefixIcon: const Icon(Icons.person_add, color: KG.primary),
                 ),
                 onChanged: (value) => _parentPrenom = value,
                 validator: (value) {
@@ -172,7 +172,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 decoration: InputDecoration(
                   labelText: 'Nom',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                  prefixIcon: const Icon(Icons.person),
+                  prefixIcon: const Icon(Icons.person, color: KG.primary),
                 ),
                 onChanged: (value) => _parentNom = value,
                 validator: (value) {
@@ -186,7 +186,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 decoration: InputDecoration(
                   labelText: 'Numéro de Téléphone',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                  prefixIcon: const Icon(Icons.phone),
+                  prefixIcon: const Icon(Icons.phone, color: KG.primary),
                 ),
                 keyboardType: TextInputType.phone,
                 onChanged: (value) => _parentTelephone = value,
@@ -215,7 +215,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 decoration: InputDecoration(
                   labelText: 'Relation avec l\'Enfant',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                  prefixIcon: const Icon(Icons.family_restroom),
+                  prefixIcon: const Icon(Icons.family_restroom, color: KG.primary),
                 ),
               ),
               const SizedBox(height: 24),

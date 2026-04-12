@@ -142,7 +142,7 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                           ),
                         );
                       },
-                      icon: const Icon(Icons.calendar_today),
+                      icon: const Icon(Icons.calendar_today, color: Colors.white),
                       label: const Text('Présences'),
                     ),
                   ),
@@ -165,7 +165,7 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                           ),
                         );
                       },
-                      icon: const Icon(Icons.warning),
+                      icon: const Icon(Icons.warning, color: Colors.white),
                       label: const Text('Absences'),
                     ),
                   ),
