@@ -52,7 +52,11 @@ class _AddChildScreenState extends State<AddChildScreen> {
                 decoration: InputDecoration(
                   labelText: 'Prénom',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                  prefixIcon: const Icon(Icons.person, color: KG.primary),
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.only(left: 12, right: 12),
+                    child: Text('👤', style: const TextStyle(fontSize: 20)),
+                  ),
+                  prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
                 ),
                 onChanged: (value) => _prenom = value,
                 validator: (value) {
@@ -66,7 +70,11 @@ class _AddChildScreenState extends State<AddChildScreen> {
                 decoration: InputDecoration(
                   labelText: 'Nom',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                  prefixIcon: const Icon(Icons.person, color: KG.primary),
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.only(left: 12, right: 12),
+                    child: Text('👤', style: const TextStyle(fontSize: 20)),
+                  ),
+                  prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
                 ),
                 onChanged: (value) => _nom = value,
                 validator: (value) {
@@ -80,11 +88,18 @@ class _AddChildScreenState extends State<AddChildScreen> {
                 decoration: InputDecoration(
                   labelText: 'Date de Naissance',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                  prefixIcon: const Icon(Icons.calendar_today, color: KG.primary),
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.only(left: 12, right: 12),
+                    child: Text('📅', style: const TextStyle(fontSize: 20)),
+                  ),
+                  prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
                   hintText: 'AAAA-MM-JJ',
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.calendar_month, color: KG.primary),
-                    onPressed: () => _selectDate(),
+                  suffixIcon: Padding(
+                    padding: const EdgeInsets.only(right: 12),
+                    child: GestureDetector(
+                      onTap: () => _selectDate(),
+                      child: Text('📅', style: const TextStyle(fontSize: 20)),
+                    ),
                   ),
                 ),
                 controller: TextEditingController(text: _dateNaissance),
@@ -113,7 +128,11 @@ class _AddChildScreenState extends State<AddChildScreen> {
                 decoration: InputDecoration(
                   labelText: 'Niveau',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                  prefixIcon: const Icon(Icons.school),
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.only(left: 12, right: 12),
+                    child: Text('🏫', style: const TextStyle(fontSize: 20)),
+                  ),
+                  prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
                 ),
               ),
               const SizedBox(height: 12),
@@ -130,7 +149,11 @@ class _AddChildScreenState extends State<AddChildScreen> {
                 decoration: InputDecoration(
                   labelText: 'Sexe',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                  prefixIcon: const Icon(Icons.wc),
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.only(left: 12, right: 12),
+                    child: Text('🚽', style: const TextStyle(fontSize: 20)),
+                  ),
+                  prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
                 ),
               ),
               const SizedBox(height: 24),

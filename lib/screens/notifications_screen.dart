@@ -33,7 +33,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         elevation: 0,
         backgroundColor: KG.primary,
         foregroundColor: Colors.white,
-        leading: const Icon(Icons.notifications, color: Colors.white),
+        leading: const Text('🔔', style: TextStyle(fontSize: 24, color: Colors.white)),
       ),
       body: Consumer<NotificationProvider>(
         builder: (context, provider, child) {
@@ -115,19 +115,19 @@ class NotificationCard extends StatelessWidget {
     }
   }
 
-  IconData _getTypeIcon(String type) {
+  String _getTypeEmoji(String type) {
     switch (type) {
       case 'message':
-        return Icons.message_rounded;
+        return '💬';
       case 'invoice':
-        return Icons.receipt_long;
+        return '🧾';
       case 'attendance':
-        return Icons.warning_rounded;
+        return '⚠️';
       case 'announcement':
       case 'notification':
-        return Icons.campaign;
+        return '📢';
       default:
-        return Icons.notifications;
+        return '🔔';
     }
   }
 
@@ -157,10 +157,9 @@ class NotificationCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Center(
-                child: Icon(
-                  _getTypeIcon(notification.type),
-                  size: 24,
-                  color: _getPriorityColor(notification.priority),
+                child: Text(
+                  _getTypeEmoji(notification.type),
+                  style: const TextStyle(fontSize: 24),
                 ),
               ),
             ),
