@@ -83,7 +83,7 @@ class _AttendanceHistoryScreenState extends State<AttendanceHistoryScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                  Text('❌', style: const TextStyle(fontSize: 48)),
                   const SizedBox(height: 16),
                   const Text('Erreur lors du chargement'),
                   const SizedBox(height: 16),
@@ -105,7 +105,7 @@ class _AttendanceHistoryScreenState extends State<AttendanceHistoryScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.calendar_today, size: 48, color: Colors.grey),
+                  Text('📅', style: const TextStyle(fontSize: 48, color: Colors.grey)),
                   const SizedBox(height: 16),
                   const Text('Pas d\'historique de présence'),
                 ],

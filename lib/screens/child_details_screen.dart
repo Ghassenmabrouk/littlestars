@@ -450,7 +450,7 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                                     backgroundColor: Colors.green,
                                     padding: const EdgeInsets.symmetric(vertical: 10),
                                   ),
-                                  icon: const Icon(Icons.download, color: Colors.white),
+                                  icon: Text('⬇️', style: const TextStyle(fontSize: 20, color: Colors.white)),
                                   label: const Text('Télécharger reçu', style: TextStyle(color: Colors.white)),
                                 ),
                               ),
@@ -588,7 +588,11 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                         labelText: 'Nom du titulaire',
                         hintText: 'John Doe',
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                        prefixIcon: const Icon(Icons.person),
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.only(left: 12, right: 12),
+                          child: Text('👤', style: const TextStyle(fontSize: 20)),
+                        ),
+                        prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -598,7 +602,11 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                         labelText: 'Numéro de carte',
                         hintText: '1234 5678 9012 3456',
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                        prefixIcon: const Icon(Icons.credit_card),
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.only(left: 12, right: 12),
+                          child: Text('💳', style: const TextStyle(fontSize: 20)),
+                        ),
+                        prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
                       ),
                       inputFormatters: [
                         _CardNumberFormatter(),
@@ -745,7 +753,7 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                                       onPressed: () {
                                         _downloadReceipt(result['receipt']);
                                       },
-                                      icon: const Icon(Icons.download),
+                                      icon: Text('⬇️', style: const TextStyle(fontSize: 20)),
                                       label: const Text('Télécharger'),
                                     ),
                                   ],

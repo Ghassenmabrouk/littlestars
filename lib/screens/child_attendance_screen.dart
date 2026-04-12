@@ -204,7 +204,7 @@ class _ChildAttendanceScreenState extends State<ChildAttendanceScreen> {
                                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                                       ),
                                     )
-                                  : const Icon(Icons.check, color: Colors.green),
+                                  : Text('✓', style: const TextStyle(color: Colors.green, fontSize: 20, fontWeight: FontWeight.bold)),
                             ),
                           );
                         },

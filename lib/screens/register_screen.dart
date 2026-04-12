@@ -65,7 +65,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 decoration: InputDecoration(
                   labelText: 'Identifiant',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                  prefixIcon: const Icon(Icons.person, color: KG.primary),
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.only(left: 12, right: 12),
+                    child: Text('👤', style: const TextStyle(fontSize: 20)),
+                  ),
+                  prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
                 ),
                 onChanged: (value) => _login = value,
                 validator: (value) {

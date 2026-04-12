@@ -184,7 +184,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
-                const Icon(Icons.message_rounded, color: Colors.white, size: 28),
+                const Text('💬', style: TextStyle(color: Colors.white, fontSize: 28)),
                 const SizedBox(width: 10),
                 const Expanded(
                   child: Column(
@@ -204,7 +204,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.person, color: Colors.white, size: 14),
+                      Text('👤', style: const TextStyle(color: Colors.white, fontSize: 14)),
                       const SizedBox(width: 4),
                       const Text(
                         'Parent',
@@ -269,7 +269,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.refresh_rounded, color: _KGTheme.primary),
+            icon: const Text('🔄', style: TextStyle(color: _KGTheme.primary, fontSize: 20)),
             tooltip: 'Actualiser',
             onPressed: _loadMessages,
           ),
@@ -287,7 +287,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.chat_bubble_outline_rounded, size: 48, color: _KGTheme.textMuted.withOpacity(0.4)),
+            Text('💬', style: TextStyle(fontSize: 48, color: _KGTheme.textMuted.withOpacity(0.4))),
             const SizedBox(height: 10),
             const Text('Aucun message pour l\'instant', style: TextStyle(color: _KGTheme.textMuted, fontSize: 13)),
           ],
@@ -471,7 +471,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
                         child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                       ),
                     )
-                  : const Icon(Icons.send_rounded, color: Colors.white, size: 20),
+                  : const Text('📤', style: TextStyle(color: Colors.white, fontSize: 20)),
             ),
           ),
         ],

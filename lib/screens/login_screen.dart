@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     onTap: () {
                       Navigator.of(context).pushNamed('/settings');
                     },
-                    child: const Icon(Icons.settings, color: Colors.white, size: 32),
+                    child: Text('⚙️', style: const TextStyle(color: Colors.white, fontSize: 32)),
                   ),
                 ),
               ),
@@ -167,8 +167,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               child: Row(
                                 children: [
-                                  const Icon(Icons.warning_amber_rounded,
-                                      color: Colors.red, size: 18),
+                                  Text('⚠️', style: const TextStyle(color: Colors.red, fontSize: 18)),
                                   const SizedBox(width: 8),
                                   Expanded(
                                     child: Text(
@@ -323,7 +322,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           icon: auth.isLoading
                               ? const SizedBox.shrink()
-                              : const Icon(Icons.g_mobiledata, size: 24),
+                              : Text('G', style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
                           label: auth.isLoading
                               ? const SizedBox(
                                   width: 22,

@@ -66,7 +66,7 @@ class _AbsenceHistoryScreenState extends State<AbsenceHistoryScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                  Text('❌', style: const TextStyle(fontSize: 48)),
                   const SizedBox(height: 16),
                   const Text('Erreur lors du chargement'),
                   const SizedBox(height: 16),
@@ -88,7 +88,7 @@ class _AbsenceHistoryScreenState extends State<AbsenceHistoryScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.check_circle, size: 48, color: Colors.green),
+                  Text('✅', style: const TextStyle(fontSize: 48, color: Colors.green)),
                   const SizedBox(height: 16),
                   const Text('Super! Pas d\'absence'),
                   const SizedBox(height: 8),

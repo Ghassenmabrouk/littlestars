@@ -433,7 +433,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       padding: EdgeInsets.only(top: 8),
                                       child: Row(
                                         children: [
-                                          Icon(Icons.lunch_dining,
+                                          Text('🍽️',
                                               size: 18, color: Colors.orange),
                                           SizedBox(width: 8),
                                           Text('Déjeuner: Pris'),
