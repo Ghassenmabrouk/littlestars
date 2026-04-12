@@ -66,12 +66,14 @@ class _LoginScreenState extends State<LoginScreen> {
               Positioned(
                 top: 0,
                 left: 0,
-                child: IconButton(
-                  icon: const Icon(Icons.settings, color: Colors.white, size: 28),
-                  tooltip: 'Paramètres',
-                  onPressed: () {
-                    Navigator.of(context).pushNamed('/settings');
-                  },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pushNamed('/settings');
+                    },
+                    child: const Icon(Icons.settings, color: Colors.white, size: 32),
+                  ),
                 ),
               ),
               // Main login form
@@ -189,12 +191,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: const TextStyle(color: KG.textDark, fontSize: 15),
                           decoration: InputDecoration(
                             labelText: AppStrings.login_field,
-                            prefixIcon: const Icon(
-                              Icons.person,
-                              color: KG.primary,
-                              size: 24,
+                            prefixIcon: const Padding(
+                              padding: EdgeInsets.only(left: 12, right: 12),
+                              child: Text('👤', style: TextStyle(fontSize: 20)),
                             ),
-                            prefixIconColor: KG.primary,
+                            prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -207,22 +208,20 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: const TextStyle(color: KG.textDark, fontSize: 15),
                           decoration: InputDecoration(
                             labelText: AppStrings.password,
-                            prefixIcon: const Icon(
-                              Icons.lock,
-                              color: KG.primary,
-                              size: 24,
+                            prefixIcon: const Padding(
+                              padding: EdgeInsets.only(left: 12, right: 12),
+                              child: Text('🔒', style: TextStyle(fontSize: 20)),
                             ),
-                            prefixIconColor: KG.primary,
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                _obscurePassword
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                                color: KG.primary,
-                                size: 24,
+                            prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+                            suffixIcon: GestureDetector(
+                              onTap: () => setState(() => _obscurePassword = !_obscurePassword),
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 12),
+                                child: Text(
+                                  _obscurePassword ? '👁️' : '👁️‍🗨️',
+                                  style: const TextStyle(fontSize: 20),
+                                ),
                               ),
-                              onPressed: () =>
-                                  setState(() => _obscurePassword = !_obscurePassword),
                             ),
                           ),
                         ),
