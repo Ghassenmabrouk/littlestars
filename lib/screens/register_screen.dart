@@ -180,7 +180,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                   prefixIcon: Padding(
                     padding: const EdgeInsets.only(left: 12, right: 12),
-                    child: Text('👨\u2d43👩', style: const TextStyle(fontSize: 20)),
+                    child: Text('👨', style: const TextStyle(fontSize: 20)),
                   ),
                   prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
                 ),
@@ -228,10 +228,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
               DropdownButtonFormField<String>(
                 value: _parentRelation.isEmpty ? 'Père' : _parentRelation,
                 items: const [
-                  DropdownMenuItem(value: 'Père', child: Text('Père')),
-                  DropdownMenuItem(value: 'Mère', child: Text('Mère')),
-                  DropdownMenuItem(value: 'Tuteur', child: Text('Tuteur')),
-                  DropdownMenuItem(value: 'Autre', child: Text('Autre')),
+                  DropdownMenuItem(value: 'Père', child: Text('👨 Père')),
+                  DropdownMenuItem(value: 'Mère', child: Text('👩 Mère')),
+                  DropdownMenuItem(value: 'Tuteur', child: Text('👤 Tuteur')),
+                  DropdownMenuItem(value: 'Autre', child: Text('❓ Autre')),
                 ],
                 onChanged: (value) {
                   setState(() {
@@ -249,7 +249,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                   prefixIcon: Padding(
                     padding: const EdgeInsets.only(left: 12, right: 12),
-                    child: Text('👨\u2d43👩\u2d43👧', style: const TextStyle(fontSize: 20)),
+                    child: Text('👨‍👩‍👧', style: const TextStyle(fontSize: 20)),
                   ),
                   prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
                 ),

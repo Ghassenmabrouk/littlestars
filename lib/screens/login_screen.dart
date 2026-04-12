@@ -12,9 +12,11 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin {
   late TextEditingController _loginController;
   late TextEditingController _passwordController;
+  late AnimationController _floatingController;
+  late AnimationController _pulseController;
   bool _obscurePassword = true;
   bool _rememberMe = false;
 
@@ -24,6 +26,18 @@ class _LoginScreenState extends State<LoginScreen> {
     _loginController = TextEditingController();
     _passwordController = TextEditingController();
     _loadSavedCredentials();
+    
+    // Floating animation
+    _floatingController = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    )..repeat(reverse: true);
+    
+    // Pulse animation
+    _pulseController = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    )..repeat(reverse: true);
   }
 
   Future<void> _loadSavedCredentials() async {
@@ -45,6 +59,8 @@ class _LoginScreenState extends State<LoginScreen> {
   void dispose() {
     _loginController.dispose();
     _passwordController.dispose();
+    _floatingController.dispose();
+    _pulseController.dispose();
     super.dispose();
   }
 
@@ -62,6 +78,86 @@ class _LoginScreenState extends State<LoginScreen> {
         child: SafeArea(
           child: Stack(
             children: [
+              // Animated floating decorative elements in background
+              Positioned(
+                top: 40,
+                left: 20,
+                child: AnimatedBuilder(
+                  animation: _floatingController,
+                  builder: (context, child) {
+                    return Transform.translate(
+                      offset: Offset(0, _floatingController.value * 20),
+                      child: Text('🎈', style: const TextStyle(fontSize: 32)),
+                    );
+                  },
+                ),
+              ),
+              Positioned(
+                top: 60,
+                right: 30,
+                child: AnimatedBuilder(
+                  animation: _floatingController,
+                  builder: (context, child) {
+                    return Transform.translate(
+                      offset: Offset(0, -_floatingController.value * 25),
+                      child: Text('❤️', style: const TextStyle(fontSize: 24)),
+                    );
+                  },
+                ),
+              ),
+              Positioned(
+                bottom: 250,
+                left: 30,
+                child: AnimatedBuilder(
+                  animation: _floatingController,
+                  builder: (context, child) {
+                    return Transform.translate(
+                      offset: Offset(0, _floatingController.value * 30),
+                      child: Text('🧸', style: const TextStyle(fontSize: 28)),
+                    );
+                  },
+                ),
+              ),
+              Positioned(
+                bottom: 200,
+                right: 25,
+                child: AnimatedBuilder(
+                  animation: _floatingController,
+                  builder: (context, child) {
+                    return Transform.translate(
+                      offset: Offset(0, -_floatingController.value * 20),
+                      child: Text('🎀', style: const TextStyle(fontSize: 26)),
+                    );
+                  },
+                ),
+              ),
+              Positioned(
+                top: 120,
+                left: 60,
+                child: AnimatedBuilder(
+                  animation: _floatingController,
+                  builder: (context, child) {
+                    return Transform.translate(
+                      offset: Offset(0, _floatingController.value * 35),
+                      child: Text('🌟', style: const TextStyle(fontSize: 22)),
+                    );
+                  },
+                ),
+              ),
+              Positioned(
+                top: 200,
+                right: 50,
+                child: AnimatedBuilder(
+                  animation: _floatingController,
+                  builder: (context, child) {
+                    return Transform.translate(
+                      offset: Offset(0, -_floatingController.value * 28),
+                      child: Text('🌸', style: const TextStyle(fontSize: 24)),
+                    );
+                  },
+                ),
+              ),
+              
               // Settings button in top-left
               Positioned(
                 top: 0,
@@ -83,24 +179,32 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                  // Logo
-                  Container(
-                    width: 96,
-                    height: 96,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: KG.primaryDark.withOpacity(0.35),
-                          blurRadius: 20,
-                          offset: const Offset(0, 8),
+                  // Animated logo
+                  AnimatedBuilder(
+                    animation: _pulseController,
+                    builder: (context, child) {
+                      return Transform.scale(
+                        scale: 0.95 + (_pulseController.value * 0.1),
+                        child: Container(
+                          width: 96,
+                          height: 96,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: KG.primaryDark.withOpacity(0.35),
+                                blurRadius: 20,
+                                offset: const Offset(0, 8),
+                              ),
+                            ],
+                          ),
+                          child: const Center(
+                            child: Text('⭐', style: TextStyle(fontSize: 54)),
+                          ),
                         ),
-                      ],
-                    ),
-                    child: const Center(
-                      child: Text('⭐', style: TextStyle(fontSize: 54)),
-                    ),
+                      );
+                    },
                   ),
                   const SizedBox(height: 18),
                   const Text(
@@ -110,6 +214,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                       letterSpacing: 0.5,
+                    ),
+                  ),
+                  const Text(
+                    'Ghofrane',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white70,
+                      fontWeight: FontWeight.w300,
                     ),
                   ),
                   const SizedBox(height: 8),
