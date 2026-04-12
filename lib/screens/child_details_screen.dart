@@ -142,7 +142,7 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                           ),
                         );
                       },
-                      icon: const Icon(Icons.calendar_today, color: Colors.white),
+                      icon: const Text('📅', style: TextStyle(fontSize: 20, color: Colors.white)),
                       label: const Text('Présences'),
                     ),
                   ),
@@ -165,7 +165,7 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                           ),
                         );
                       },
-                      icon: const Icon(Icons.warning, color: Colors.white),
+                      icon: const Text('⚠️', style: TextStyle(fontSize: 20, color: Colors.white)),
                       label: const Text('Absences'),
                     ),
                   ),
@@ -267,7 +267,7 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                                     color: Colors.green[100],
                                     borderRadius: BorderRadius.circular(8),
                                   ),
-                                  child: Icon(Icons.check_circle, color: Colors.green[700], size: 28),
+                                  child: Text('✅', style: TextStyle(color: Colors.green[700], fontSize: 28)),
                                 ),
                                 const SizedBox(height: 8),
                                 Text('Payé', style: TextStyle(color: Colors.grey[600])),
@@ -293,7 +293,7 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                                     color: Colors.orange[100],
                                     borderRadius: BorderRadius.circular(8),
                                   ),
-                                  child: Icon(Icons.pending_actions, color: Colors.orange[700], size: 28),
+                                  child: Text('⌋', style: TextStyle(color: Colors.orange[700], fontSize: 28)),
                                 ),
                                 const SizedBox(height: 8),
                                 Text('En Attente', style: TextStyle(color: Colors.grey[600])),
@@ -328,7 +328,7 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                     child: Center(
                       child: Column(
                         children: [
-                          Icon(Icons.receipt_long, size: 56, color: Colors.grey[300]),
+                          Text('💳', style: TextStyle(fontSize: 56, color: Colors.grey[600])),
                           const SizedBox(height: 12),
                           Text(
                             'Aucune facture',
@@ -493,7 +493,7 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                   final contact = contacts[index] as Map<String, dynamic>;
                   return Card(
                     child: ListTile(
-                      leading: const Icon(Icons.person),
+                      leading: const Text('👤', style: TextStyle(fontSize: 20)),
                       title: Text(contact['name'] ?? 'Contact'),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
