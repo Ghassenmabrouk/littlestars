@@ -67,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 top: 0,
                 left: 0,
                 child: IconButton(
-                  icon: const Icon(Icons.settings_rounded, color: Colors.white, size: 28),
+                  icon: const Icon(Icons.settings, color: Colors.white, size: 28),
                   tooltip: 'Paramètres',
                   onPressed: () {
                     Navigator.of(context).pushNamed('/settings');
@@ -190,7 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           decoration: InputDecoration(
                             labelText: AppStrings.login_field,
                             prefixIcon: const Icon(
-                              Icons.person_outline_rounded,
+                              Icons.person,
                               color: KG.primary,
                               size: 24,
                             ),
@@ -208,7 +208,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           decoration: InputDecoration(
                             labelText: AppStrings.password,
                             prefixIcon: const Icon(
-                              Icons.lock_outline_rounded,
+                              Icons.lock,
                               color: KG.primary,
                               size: 24,
                             ),
@@ -216,8 +216,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             suffixIcon: IconButton(
                               icon: Icon(
                                 _obscurePassword
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility_outlined,
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
                                 color: KG.primary,
                                 size: 24,
                               ),
