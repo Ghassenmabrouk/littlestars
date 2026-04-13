@@ -128,7 +128,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.child_care, size: 80, color: KG.primary),
+            Text('⭐', style: const TextStyle(fontSize: 100)),
             const SizedBox(height: 20),
             const Text(
               'Jardin d\'Enfant',

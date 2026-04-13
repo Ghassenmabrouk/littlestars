@@ -140,7 +140,10 @@ class _AddChildScreenState extends State<AddChildScreen> {
                     child: Text('🏫', style: const TextStyle(fontSize: 20)),
                   ),
                   prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+                  suffixIcon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
                 ),
+                isExpanded: true,
+                isDense: false,
               ),
               const SizedBox(height: 12),
               
@@ -161,7 +164,10 @@ class _AddChildScreenState extends State<AddChildScreen> {
                     child: Text('🚽', style: const TextStyle(fontSize: 20)),
                   ),
                   prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+                  suffixIcon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
                 ),
+                isExpanded: true,
+                isDense: false,
               ),
               const SizedBox(height: 24),
               
@@ -230,12 +236,12 @@ class _AddChildScreenState extends State<AddChildScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text('Enfant ajouté avec succès!'),
-          duration: const Duration(seconds: 10),
+          duration: const Duration(seconds: 1),
           action: SnackBarAction(label: 'Fermer', onPressed: () {}),
         ),
       );
+      // Call the callback which handles navigation and refresh
       widget.onChildAdded();
-      Navigator.of(context).pop();
     } else {
       setState(() => _errorMessage = response['message'] ?? 'Échec de l\'ajout de l\'enfant');
     }

@@ -283,9 +283,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               MaterialPageRoute(
                                 builder: (context) => AddChildScreen(
                                   userEmail: authProvider.user?.email ?? '',
-                                  onChildAdded: () {
-                                    Navigator.pop(context);
-                                    setState(() {});
+                                  onChildAdded: () async {
+                                    // Reload children from server
+                                    await authProvider.reloadChildren();
+                                    if (context.mounted) {
+                                      Navigator.pop(context);
+                                    }
                                   },
                                 ),
                               ),
@@ -371,10 +374,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(
-                                      Icons.child_care,
-                                      size: 32,
-                                      color: isSelected ? Colors.white : KG.primary,
+                                    Text(
+                                      child.sexe == 'F' ? '👧' : '👦',
+                                      style: const TextStyle(fontSize: 32),
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
@@ -571,9 +573,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           MaterialPageRoute(
                             builder: (context) => AddChildScreen(
                               userEmail: authProvider.user?.email ?? '',
-                              onChildAdded: () {
-                                Navigator.pop(context);
-                                _loadTodayStatus();
+                              onChildAdded: () async {
+                                // Reload children from server
+                                await authProvider.reloadChildren();
+                                if (context.mounted) {
+                                  Navigator.pop(context);
+                                  _loadTodayStatus();
+                                }
                               },
                             ),
                           ),

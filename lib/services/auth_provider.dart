@@ -209,6 +209,26 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  /// Reload children list from server (called after adding a new child)
+  Future<bool> reloadChildren() async {
+    try {
+      if (_user == null) return false;
+      
+      final prefs = await SharedPreferences.getInstance();
+      final savedLogin = prefs.getString('login');
+      final password = prefs.getString('password');
+
+      if (savedLogin != null && password != null) {
+        // Re-login to refresh children list
+        return await login(savedLogin, password);
+      }
+      return false;
+    } catch (e) {
+      print('Error reloading children: $e');
+      return false;
+    }
+  }
+
   void clearError() {
     _errorMessage = null;
     notifyListeners();
