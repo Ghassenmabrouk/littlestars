@@ -27,6 +27,7 @@ class Child {
   final String prenom;
   final String? dateNaissance;
   final String? groupeAge;
+  final String? sexe;
   final String statut;
 
   Child({
@@ -35,6 +36,7 @@ class Child {
     required this.prenom,
     this.dateNaissance,
     this.groupeAge,
+    this.sexe,
     required this.statut,
   });
 
@@ -55,6 +57,7 @@ class Child {
       prenom: (json['prenom'] ?? '').toString(),
       dateNaissance: json['date_naissance']?.toString(),
       groupeAge: json['groupe_age']?.toString(),
+      sexe: json['sexe']?.toString(),
       statut: (json['statut'] ?? 'Actif').toString(),
     );
   }
@@ -67,6 +70,7 @@ class Child {
       'prenom': prenom,
       'date_naissance': dateNaissance,
       'groupe_age': groupeAge,
+      'sexe': sexe,
       'statut': statut,
     };
   }
