@@ -8,12 +8,10 @@ class NotificationProvider extends ChangeNotifier {
 
   List<AppNotification> get notifications => _notifications;
   bool get isLoading => _isLoading;
+  
+  // Count unread notifications properly
   int get unreadCount {
-    int total = 0;
-    for (var notification in _notifications) {
-      total += notification.count;
-    }
-    return total;
+    return _notifications.where((n) => !n.read).length;
   }
 
   Future<void> fetchNotifications(int parentId) async {
@@ -45,6 +43,11 @@ class NotificationProvider extends ChangeNotifier {
         break;
       }
     }
+  }
+
+  void addNotification(AppNotification notification) {
+    _notifications.insert(0, notification);
+    notifyListeners();
   }
 
   void clearNotifications() {

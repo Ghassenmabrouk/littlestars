@@ -34,6 +34,33 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         backgroundColor: KG.primary,
         foregroundColor: Colors.white,
         leading: const Text('🔔', style: TextStyle(fontSize: 24, color: Colors.white)),
+        actions: [
+          Consumer<NotificationProvider>(
+            builder: (context, provider, _) {
+              final unread = provider.unreadCount;
+              return Padding(
+                padding: const EdgeInsets.all(16),
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      unread > 99 ? '99+' : unread.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Consumer<NotificationProvider>(
         builder: (context, provider, child) {
@@ -51,11 +78,19 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   Text('🔔', style: TextStyle(fontSize: 64, color: Colors.grey[400])),
                   const SizedBox(height: 16),
                   Text(
-                    'No Notifications',
+                    'Aucune Notification',
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.grey[600],
                       fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Vous recevrez les notifications ici',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[500],
                     ),
                   ),
                 ],
@@ -63,13 +98,24 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             );
           }
 
-          return ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              ...provider.notifications.map((notif) {
-                return NotificationCard(notification: notif);
-              }).toList(),
-            ],
+          return RefreshIndicator(
+            onRefresh: () async {
+              final authProvider = context.read<AuthProvider>();
+              if (authProvider.user != null) {
+                await provider.fetchNotifications(authProvider.user!.id);
+              }
+            },
+            child: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                ...provider.notifications.map((notif) {
+                  return NotificationCard(
+                    notification: notif,
+                    onMarkAsRead: () => provider.markAsRead(notif.id),
+                  );
+                }).toList(),
+              ],
+            ),
           );
         },
       ),
@@ -79,10 +125,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
 class NotificationCard extends StatelessWidget {
   final AppNotification notification;
+  final VoidCallback? onMarkAsRead;
 
   const NotificationCard({
     Key? key,
     required this.notification,
+    this.onMarkAsRead,
   }) : super(key: key);
 
   Color _getPriorityColor(String priority) {
@@ -129,97 +177,143 @@ class NotificationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: _getBackgroundColor(notification.priority),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: _getPriorityColor(notification.priority).withOpacity(0.3),
-          width: 1,
+    return GestureDetector(
+      onTap: onMarkAsRead,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        decoration: BoxDecoration(
+          color: notification.read 
+              ? Colors.grey[50] 
+              : _getBackgroundColor(notification.priority),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: notification.read 
+                ? Colors.grey.withOpacity(0.2)
+                : _getPriorityColor(notification.priority).withOpacity(0.3),
+            width: notification.read ? 1 : 2,
+          ),
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Icon
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: _getPriorityColor(notification.priority).withOpacity(0.2),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Center(
-                child: Text(
-                  _getTypeEmoji(notification.type),
-                  style: const TextStyle(fontSize: 24),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Unread indicator
+              if (!notification.read)
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: const BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              const SizedBox(width: 8),
+              // Icon
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: _getPriorityColor(notification.priority).withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Center(
+                  child: Text(
+                    _getTypeEmoji(notification.type),
+                    style: const TextStyle(fontSize: 24),
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(width: 12),
-            // Content
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          notification.title,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+              const SizedBox(width: 12),
+              // Content
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            notification.title,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: notification.read ? Colors.grey[600] : Colors.black,
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          overflow: TextOverflow.ellipsis,
                         ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: _getPriorityColor(notification.priority),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            notification.count.toString(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      notification.message,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: notification.read ? Colors.grey[600] : Colors.grey[700],
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: _getPriorityColor(notification.priority),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          notification.count.toString(),
-                          style: const TextStyle(
-                            color: Colors.white,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          _formatTime(notification.createdAt),
+                          style: TextStyle(
                             fontSize: 12,
-                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[500],
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    notification.message,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[700],
+                        if (!notification.read)
+                          GestureDetector(
+                            onTap: onMarkAsRead,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: KG.primary.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                'Marquer comme lu',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: KG.primary,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    _formatTime(notification.createdAt),
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[500],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -230,13 +324,13 @@ class NotificationCard extends StatelessWidget {
     final difference = now.difference(dateTime);
 
     if (difference.inSeconds < 60) {
-      return 'just now';
+      return 'À l\'instant';
     } else if (difference.inMinutes < 60) {
-      return '${difference.inMinutes}m ago';
+      return 'Il y a ${difference.inMinutes}m';
     } else if (difference.inHours < 24) {
-      return '${difference.inHours}h ago';
+      return 'Il y a ${difference.inHours}h';
     } else if (difference.inDays < 7) {
-      return '${difference.inDays}d ago';
+      return 'Il y a ${difference.inDays}j';
     } else {
       return '${dateTime.day}/${dateTime.month}/${dateTime.year}';
     }

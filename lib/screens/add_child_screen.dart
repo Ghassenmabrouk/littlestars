@@ -123,15 +123,19 @@ class _AddChildScreenState extends State<AddChildScreen> {
               ),
               const SizedBox(height: 12),
               
-              DropdownButtonFormField(
+              DropdownButtonFormField<String>(
                 value: _groupeAge,
                 items: _groupes.map((groupe) {
-                  return DropdownMenuItem(
+                  return DropdownMenuItem<String>(
                     value: groupe,
                     child: Text(groupe),
                   );
                 }).toList(),
-                onChanged: (value) => setState(() => _groupeAge = value ?? _groupeAge),
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() => _groupeAge = value);
+                  }
+                },
                 decoration: InputDecoration(
                   labelText: 'Niveau',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
@@ -140,22 +144,22 @@ class _AddChildScreenState extends State<AddChildScreen> {
                     child: Text('🏫', style: const TextStyle(fontSize: 20)),
                   ),
                   prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
-                  suffixIcon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
                 ),
                 isExpanded: true,
-                isDense: false,
               ),
               const SizedBox(height: 12),
               
-              DropdownButtonFormField(
+              DropdownButtonFormField<String>(
                 value: _sexe,
                 items: const [
-                  DropdownMenuItem(value: 'M', child: Text('Garçon')),
-                  DropdownMenuItem(value: 'F', child: Text('Fille')),
-                ]
-                    .map((e) => e)
-                    .toList(),
-                onChanged: (value) => setState(() => _sexe = value ?? _sexe),
+                  DropdownMenuItem<String>(value: 'M', child: Text('Garçon')),
+                  DropdownMenuItem<String>(value: 'F', child: Text('Fille')),
+                ].toList(),
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() => _sexe = value);
+                  }
+                },
                 decoration: InputDecoration(
                   labelText: 'Sexe',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
@@ -164,10 +168,8 @@ class _AddChildScreenState extends State<AddChildScreen> {
                     child: Text('🚽', style: const TextStyle(fontSize: 20)),
                   ),
                   prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
-                  suffixIcon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
                 ),
                 isExpanded: true,
-                isDense: false,
               ),
               const SizedBox(height: 24),
               

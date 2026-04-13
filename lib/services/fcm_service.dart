@@ -84,23 +84,36 @@ class FCMService {
     print('Foreground message received: ${message.messageId}');
     print('Title: ${message.notification?.title}');
     print('Body: ${message.notification?.body}');
+    
     // Show a local notification for foreground messages
     if (message.notification != null) {
+      // Use unique ID based on timestamp to prevent overwriting
+      final notificationId = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+      
       const AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'default_channel_id',
-        'Default',
-        channelDescription: 'Default channel for notifications',
+        'high_priority_channel',
+        'High Priority Notifications',
+        channelDescription: 'Notifications from Jardin d\'Enfant',
         importance: Importance.max,
         priority: Priority.high,
-        showWhen: false,
+        enableVibration: true,
+        playSound: true,
+        sound: RawResourceAndroidNotificationSound('notification'),
       );
-      const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
+      
+      const NotificationDetails platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics,
+      );
+      
       await flutterLocalNotificationsPlugin.show(
-        id: 0,
-        title: message.notification!.title,
-        body: message.notification!.body,
-        notificationDetails: platformChannelSpecifics,
+        notificationId,
+        message.notification!.title ?? 'Notification',
+        message.notification!.body ?? '',
+        platformChannelSpecifics,
+        payload: jsonEncode(message.data),
       );
+      
+      print('[NOTIFICATION] Displayed notification with ID: $notificationId');
     }
   }
 

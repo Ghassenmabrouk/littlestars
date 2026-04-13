@@ -278,21 +278,26 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             backgroundColor: KG.primary,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           ),
-                          onPressed: () {
-                            Navigator.of(context).push(
+                          onPressed: () async {
+                            final result = await Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => AddChildScreen(
                                   userEmail: authProvider.user?.email ?? '',
-                                  onChildAdded: () async {
-                                    // Reload children from server
-                                    await authProvider.reloadChildren();
-                                    if (context.mounted) {
-                                      Navigator.pop(context);
-                                    }
+                                  onChildAdded: () {
+                                    // Just pop the dialog
+                                    Navigator.pop(context, true);
                                   },
                                 ),
                               ),
                             );
+                            
+                            // If child was added, reload data
+                            if (result == true) {
+                              await authProvider.reloadChildren();
+                              if (mounted) {
+                                _loadTodayStatus();
+                              }
+                            }
                           },
                         ),
                       ),
