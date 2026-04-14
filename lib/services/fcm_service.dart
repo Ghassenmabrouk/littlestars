@@ -106,10 +106,10 @@ class FCMService {
       );
       
       await flutterLocalNotificationsPlugin.show(
-        notificationId,
-        message.notification!.title ?? 'Notification',
-        message.notification!.body ?? '',
-        platformChannelSpecifics,
+        id: notificationId,
+        title: message.notification!.title ?? 'Notification',
+        body: message.notification!.body ?? '',
+        notificationDetails: platformChannelSpecifics,
         payload: jsonEncode(message.data),
       );
       
