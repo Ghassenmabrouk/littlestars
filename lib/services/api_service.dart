@@ -524,4 +524,25 @@ class ApiService {
       };
     }
   }
+  
+  static Future<Map<String, dynamic>> markNotificationAsRead(String notificationId) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/notifications_api.php?action=mark_as_read'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'notification_id': notificationId}),
+      ).timeout(const Duration(seconds: 30));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        return {
+          'success': false,
+          'message': 'Failed to mark notification as read'
+        };
+      }
+    } catch (e) {
+      return {'success': false, 'message': 'Error: $e'};
+    }
+  }
 }

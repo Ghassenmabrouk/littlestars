@@ -18,14 +18,12 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
   late AnimationController _floatingController;
   late AnimationController _pulseController;
   bool _obscurePassword = true;
-  bool _rememberMe = false;
 
   @override
   void initState() {
     super.initState();
     _loginController = TextEditingController();
     _passwordController = TextEditingController();
-    _loadSavedCredentials();
     
     // Floating animation
     _floatingController = AnimationController(
@@ -38,21 +36,6 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat(reverse: true);
-  }
-
-  Future<void> _loadSavedCredentials() async {
-    final prefs = await SharedPreferences.getInstance();
-    final savedLogin = prefs.getString('login');
-    final savedPassword = prefs.getString('password');
-    final rememberMe = prefs.getBool('remember_me') ?? false;
-
-    if (savedLogin != null && rememberMe) {
-      setState(() {
-        _loginController.text = savedLogin;
-        _passwordController.text = savedPassword ?? '';
-        _rememberMe = true;
-      });
-    }
   }
 
   @override
@@ -326,27 +309,6 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                             ),
                           ),
                         ),
-                        const SizedBox(height: 16),
-
-                        // Remember Me checkbox
-                        Row(
-                          children: [
-                            Checkbox(
-                              value: _rememberMe,
-                              onChanged: (value) {
-                                setState(() => _rememberMe = value ?? false);
-                              },
-                              activeColor: KG.primary,
-                            ),
-                            const Text(
-                              'Remember me',
-                              style: TextStyle(
-                                color: KG.textDark,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
                         const SizedBox(height: 20),
 
                         // Login button
@@ -362,7 +324,6 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
                                         final ok = await auth.login(
                                           _loginController.text.trim(),
                                           _passwordController.text,
-                                          rememberMe: _rememberMe,
                                         );
                                         if (ok && mounted) {
                                           Navigator.of(context)

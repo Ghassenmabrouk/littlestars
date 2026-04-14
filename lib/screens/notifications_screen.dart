@@ -13,9 +13,13 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
+  late Future<void> _refreshFuture;
+  
   @override
   void initState() {
     super.initState();
+    // Auto-refresh notifications every 30 seconds when screen is active
+    _startAutoRefresh();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final authProvider = context.read<AuthProvider>();
       final notifProvider = context.read<NotificationProvider>();
@@ -23,6 +27,23 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         notifProvider.fetchNotifications(authProvider.user!.id);
       }
     });
+  }
+  
+  void _startAutoRefresh() {
+    Future.delayed(const Duration(seconds: 30), () {
+      if (mounted) {
+        final authProvider = context.read<AuthProvider>();
+        final notifProvider = context.read<NotificationProvider>();
+        if (authProvider.user != null) {
+          notifProvider.fetchNotifications(authProvider.user!.id).then((_) => _startAutoRefresh());
+        }
+      }
+    });
+  }
+  
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override

@@ -35,11 +35,19 @@ class NotificationProvider extends ChangeNotifier {
     }
   }
 
-  void markAsRead(String notificationId) {
+  Future<void> markAsRead(String notificationId) async {
     for (int i = 0; i < _notifications.length; i++) {
       if (_notifications[i].id == notificationId) {
         _notifications[i].read = true;
         notifyListeners();
+        
+        // Call API to mark as read on backend
+        try {
+          final service = NotificationService();
+          await service.markAsRead(notificationId);
+        } catch (e) {
+          print('Error marking notification as read: $e');
+        }
         break;
       }
     }

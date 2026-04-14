@@ -78,4 +78,15 @@ class NotificationService {
     return List.from(notifications)
       ..sort((a, b) => (priorityMap[a.priority] ?? 2).compareTo(priorityMap[b.priority] ?? 2));
   }
+  
+  Future<void> markAsRead(String notificationId) async {
+    try {
+      final response = await ApiService.markNotificationAsRead(notificationId);
+      if (response['success']) {
+        print('Notification marked as read: $notificationId');
+      }
+    } catch (e) {
+      print('Error marking notification as read: $e');
+    }
+  }
 }
