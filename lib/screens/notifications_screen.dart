@@ -18,7 +18,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   @override
   void initState() {
     super.initState();
-    // Auto-refresh notifications every 30 seconds when screen is active
+    // Auto-refresh notifications every 10 seconds when screen is active
     _startAutoRefresh();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final authProvider = context.read<AuthProvider>();
@@ -30,7 +30,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   }
   
   void _startAutoRefresh() {
-    Future.delayed(const Duration(seconds: 30), () {
+    Future.delayed(const Duration(seconds: 10), () {
       if (mounted) {
         final authProvider = context.read<AuthProvider>();
         final notifProvider = context.read<NotificationProvider>();

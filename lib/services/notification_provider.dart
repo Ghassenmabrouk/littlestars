@@ -65,6 +65,6 @@ class NotificationProvider extends ChangeNotifier {
 
   bool shouldRefresh() {
     if (_lastFetch == null) return true;
-    return DateTime.now().difference(_lastFetch!).inSeconds > 30; // Refresh every 30 seconds
+    return DateTime.now().difference(_lastFetch!).inSeconds > 10; // Refresh every 10 seconds
   }
 }
