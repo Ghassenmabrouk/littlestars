@@ -255,7 +255,10 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => ActivitiesScreen(childId: childIdInt),
+                    builder: (context) => ActivitiesScreen(
+                      childId: childIdInt,
+                      childName: '${widget.child['prenom']} ${widget.child['nom']}',
+                    ),
                   ),
                 );
               },
