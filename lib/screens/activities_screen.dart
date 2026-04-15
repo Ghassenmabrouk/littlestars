@@ -322,7 +322,7 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
                                     ),
                                   )
                                 : Text(
-                                    isEnrolled ? 'Remove from Activity' : 'Join Activity',
+                                    isEnrolled ? 'Retirer de l\'activité' : 'Rejoindre l\'activité',
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 14,

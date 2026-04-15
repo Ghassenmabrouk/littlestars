@@ -1,5 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'settings_service.dart';
 
 class ApiService {
@@ -573,12 +574,16 @@ class ApiService {
   /// Enroll child in an activity
   static Future<Map<String, dynamic>> enrollChildInActivity(int activityId, int childId) async {
     try {
+      final prefs = await SharedPreferences.getInstance();
+      final parentId = prefs.getInt('parent_id') ?? 0;
+      
       final response = await http.post(
         Uri.parse('$baseUrl/activity_api.php?action=enroll_child'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'activity_id': activityId,
           'child_id': childId,
+          'parent_id': parentId,
         }),
       ).timeout(const Duration(seconds: 30));
 
