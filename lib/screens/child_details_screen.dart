@@ -263,7 +263,7 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
               label: const Text('Parcourir et ajouter des activités'),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 12),
-                backgroundColor: KGTheme.primary,
+                backgroundColor: KG.primary,
                 foregroundColor: Colors.white,
               ),
             ),
