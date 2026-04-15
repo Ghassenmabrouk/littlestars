@@ -587,29 +587,6 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                                   child: const Text('Payer maintenant', style: TextStyle(color: Colors.white)),
                                 ),
                               ),
-                            ] else ...[
-                              const SizedBox(height: 12),
-                              SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton.icon(
-                                  onPressed: () {
-                                    _downloadInvoiceReceipt(
-                                      receiptNumber: 'REC-${payment['id']}-${DateTime.now().millisecondsSinceEpoch}',
-                                      childName: widget.child['prenom'] + ' ' + widget.child['nom'],
-                                      amount: amount.toString(),
-                                      month: month,
-                                      year: year.toString(),
-                                      paymentDate: payment['date_paiement'] ?? DateTime.now().toString().split(' ')[0],
-                                    );
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.green,
-                                    padding: const EdgeInsets.symmetric(vertical: 10),
-                                  ),
-                                  icon: Text('⬇️', style: const TextStyle(fontSize: 20, color: Colors.white)),
-                                  label: const Text('Télécharger reçu', style: TextStyle(color: Colors.white)),
-                                ),
-                              ),
                             ],
                           ],
                         ),
@@ -904,13 +881,6 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                                     TextButton(
                                       onPressed: () => Navigator.of(ctx).pop(),
                                       child: const Text('Fermer'),
-                                    ),
-                                    ElevatedButton.icon(
-                                      onPressed: () {
-                                        _downloadReceipt(result['receipt']);
-                                      },
-                                      icon: Text('⬇️', style: const TextStyle(fontSize: 20)),
-                                      label: const Text('Télécharger'),
                                     ),
                                   ],
                                 ),
