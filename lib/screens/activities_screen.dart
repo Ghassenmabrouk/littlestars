@@ -50,20 +50,17 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
           : await ApiService.enrollChildInActivity(activityId, widget.childId);
 
       if (response['success'] == true) {
+        // Refresh both futures to get latest data
         setState(() {
-          if (isEnrolled) {
-            _enrolledActivityIds.remove(activityId);
-          } else {
-            _enrolledActivityIds.add(activityId);
-          }
+          _loadActivities();
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
               isEnrolled
-                  ? '✅ ${widget.childName} removed from activity'
-                  : '✅ ${widget.childName} enrolled in activity',
+                  ? '✅ ${widget.childName} retiré de l\'activité'
+                  : '✅ ${widget.childName} inscrit à l\'activité',
             ),
             backgroundColor: Colors.green,
             duration: const Duration(seconds: 2),
@@ -72,7 +69,7 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('❌ Error: ${response['message'] ?? 'Unknown error'}'),
+            content: Text('❌ Erreur: ${response['message'] ?? 'Erreur inconnue'}'),
             backgroundColor: Colors.red,
           ),
         );
@@ -80,7 +77,7 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('❌ Error: $e'),
+          content: Text('❌ Erreur: $e'),
           backgroundColor: Colors.red,
         ),
       );
@@ -152,12 +149,85 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
           return RefreshIndicator(
             onRefresh: () async {
               setState(() => _loadActivities());
+              // Wait for both futures to complete
+              await Future.wait([_activitiesFuture, _enrolledFuture]);
             },
             child: ListView.builder(
               padding: const EdgeInsets.all(16),
-              itemCount: activities.length,
+              itemCount: activities.length + 1, // +1 for enrolled header
               itemBuilder: (context, index) {
-                final activity = activities[index];
+                // Show enrolled activities section first
+                if (index == 0) {
+                  return FutureBuilder<Map<String, dynamic>>(
+                    future: _enrolledFuture,
+                    builder: (context, enrolledSnapshot) {
+                      if (enrolledSnapshot.connectionState == ConnectionState.waiting) {
+                        return const Padding(
+                          padding: EdgeInsets.only(bottom: 16),
+                          child: SizedBox(height: 20, child: CircularProgressIndicator()),
+                        );
+                      }
+
+                      final enrolledData = enrolledSnapshot.data ?? {};
+                      final enrolledActivities = (enrolledData['data'] as List? ?? []).cast<Map<String, dynamic>>();
+
+                      if (enrolledActivities.isEmpty) {
+                        return const Padding(
+                          padding: EdgeInsets.only(bottom: 24),
+                          child: Text(
+                            'Aucune activité inscrite',
+                            style: TextStyle(color: Colors.grey, fontSize: 14),
+                          ),
+                        );
+                      }
+
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 24),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              '✅ Activités Inscrites',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            ...enrolledActivities.map((activity) {
+                              final title = activity['titre'] ?? 'Unknown';
+                              return Container(
+                                margin: const EdgeInsets.only(bottom: 8),
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: Colors.green[50],
+                                  border: Border.all(color: Colors.green, width: 1),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  '• $title',
+                                  style: const TextStyle(color: Colors.green, fontWeight: FontWeight.w500),
+                                ),
+                              );
+                            }).toList(),
+                            const Divider(height: 24),
+                            const Text(
+                              '📚 Toutes les Activités',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                }
+
+                final activity = activities[index - 1];
                 final activityId = int.tryParse(activity['id'].toString()) ?? 0;
                 final title = activity['titre'] ?? activity['title'] ?? 'Unknown';
                 final description = activity['description'] ?? '';
