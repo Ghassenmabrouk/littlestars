@@ -10,6 +10,7 @@ import '../theme/kg_theme.dart';
 import 'attendance_history_screen.dart';
 import 'absence_history_screen.dart';
 import 'messaging_screen.dart';
+import 'activities_screen.dart';
 
 class ChildDetailsScreen extends StatefulWidget {
   final Map<String, dynamic> child;
@@ -221,8 +222,10 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
   }
 
   Widget _buildActivitiesTab(dynamic childId) {
+    final childIdInt = int.parse(childId.toString());
+    
     return FutureBuilder<Map<String, dynamic>>(
-      future: ApiService.getChildActivities(int.parse(childId.toString())),
+      future: ApiService.getChildActivities(childIdInt),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -244,95 +247,124 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
         final data = snapshot.data ?? {};
         final activities = data['data'] as List? ?? [];
 
-        if (activities.isEmpty) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('🎨', style: const TextStyle(fontSize: 48)),
-                const SizedBox(height: 16),
-                const Text('Aucune activité'),
-              ],
-            ),
-          );
-        }
-
-        return ListView.builder(
+        return ListView(
           padding: const EdgeInsets.all(16),
-          itemCount: activities.length,
-          itemBuilder: (context, index) {
-            final activity = activities[index] as Map<String, dynamic>;
-            final title = activity['title'] ?? activity['nom'] ?? 'Sans titre';
-            final description = activity['description'] ?? activity['details'] ?? '';
-            final date = activity['date'] ?? activity['created_at'] ?? '';
-            final educator = activity['educator'] ?? activity['educateur'] ?? 'Éducateur';
+          children: [
+            // Browse More Activities Button
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ActivitiesScreen(childId: childIdInt),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.add_circle_outline),
+              label: const Text('Parcourir et ajouter des activités'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                backgroundColor: KGTheme.primary,
+                foregroundColor: Colors.white,
+              ),
+            ),
+            
+            const SizedBox(height: 20),
+            
+            // Enrolled Activities Section
+            if (activities.isNotEmpty) ...[
+              const Text(
+                'Activités inscrites',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12),
+              ...activities.map((activity) {
+                final title = activity['title'] ?? activity['nom'] ?? 'Sans titre';
+                final description = activity['description'] ?? activity['details'] ?? '';
+                final date = activity['date'] ?? activity['created_at'] ?? '';
+                final educator = activity['educator'] ?? activity['educateur'] ?? 'Éducateur';
 
-            return Card(
-              margin: const EdgeInsets.only(bottom: 12),
-              elevation: 2,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+                return Card(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('🎨', style: const TextStyle(fontSize: 24)),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                title,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        Row(
+                          children: [
+                            Text('🎨', style: const TextStyle(fontSize: 24)),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    title,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  if (date.isNotEmpty)
+                                    Text(
+                                      date,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                ],
                               ),
-                              if (date.isNotEmpty)
-                                Text(
-                                  date,
+                            ),
+                          ],
+                        ),
+                        if (description.isNotEmpty) ...[
+                          const SizedBox(height: 12),
+                          Text(
+                            description,
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ],
+                        if (educator.isNotEmpty) ...[
+                          const SizedBox(height: 12),
+                          Row(
+                            children: [
+                              const Text('👩‍🏫 ', style: TextStyle(fontSize: 16)),
+                              Expanded(
+                                child: Text(
+                                  educator,
                                   style: const TextStyle(
                                     fontSize: 12,
                                     color: Colors.grey,
                                   ),
                                 ),
+                              ),
                             ],
                           ),
-                        ),
+                        ],
                       ],
                     ),
-                    if (description.isNotEmpty) ...[
-                      const SizedBox(height: 12),
-                      Text(
-                        description,
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                    ],
-                    if (educator.isNotEmpty) ...[
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          const Text('👩‍🏫 ', style: TextStyle(fontSize: 16)),
-                          Expanded(
-                            child: Text(
-                              educator,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                  ),
+                );
+              }).toList(),
+            ] else ...[
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('🎨', style: const TextStyle(fontSize: 48)),
+                    const SizedBox(height: 16),
+                    const Text('Aucune activité inscrite'),
                   ],
                 ),
               ),
-            );
-          },
+            ],
+          ],
         );
       },
     );
