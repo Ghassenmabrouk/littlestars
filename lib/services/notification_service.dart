@@ -28,6 +28,28 @@ class AppNotification {
         ? rawCount
         : (int.tryParse(rawCount?.toString() ?? '') ?? 1);
 
+    // Parse created_at timestamp
+    DateTime? parsedCreatedAt;
+    final createdAtField = json['created_at'] ?? json['timestamp'];
+    if (createdAtField != null && createdAtField.toString().isNotEmpty) {
+      try {
+        // Handle ISO 8601 format with Z or without
+        String timestampStr = createdAtField.toString();
+        if (timestampStr.endsWith('Z')) {
+          parsedCreatedAt = DateTime.parse(timestampStr);
+        } else if (timestampStr.contains('T')) {
+          // ISO 8601 without Z
+          parsedCreatedAt = DateTime.parse(timestampStr);
+        } else if (timestampStr.contains(' ')) {
+          // PostgreSQL format: "2024-01-15 10:30:45"
+          timestampStr = timestampStr.replaceFirst(' ', 'T');
+          parsedCreatedAt = DateTime.parse(timestampStr);
+        }
+      } catch (e) {
+        print('Error parsing timestamp: $createdAtField, error: $e');
+      }
+    }
+
     return AppNotification(
       id: json['id'] ?? '',
       type: json['type'] ?? 'unknown',
@@ -35,6 +57,7 @@ class AppNotification {
       message: json['message'] ?? '',
       count: parsedCount > 0 ? parsedCount : 1,
       priority: json['priority'] ?? 'medium',
+      createdAt: parsedCreatedAt,
     );
   }
 }
