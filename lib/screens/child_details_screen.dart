@@ -99,7 +99,7 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
       case 1:
         return _buildMessagesTab(childId);
       case 2:
-        return _buildActivitiesTab(childId);
+        return _buildActivitiesTab(childId, childName);
       case 3:
         return _buildFeesTab(childId);
       default:
@@ -221,7 +221,7 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
     );
   }
 
-  Widget _buildActivitiesTab(dynamic childId) {
+  Widget _buildActivitiesTab(dynamic childId, String childName) {
     final childIdInt = int.parse(childId.toString());
     
     return FutureBuilder<Map<String, dynamic>>(
