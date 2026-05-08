@@ -85,14 +85,14 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
           const Divider(height: 0),
           // Tab content
           Expanded(
-            child: _buildTabContent(childId),
+            child: _buildTabContent(childId, childName),
           )
         ],
       ),
     );
   }
 
-  Widget _buildTabContent(dynamic childId) {
+  Widget _buildTabContent(dynamic childId, String childName) {
     switch (_selectedTabIndex) {
       case 0:
         return _buildOverviewTab(childId);
