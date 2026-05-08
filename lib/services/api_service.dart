@@ -545,4 +545,84 @@ class ApiService {
       return {'success': false, 'message': 'Error: $e'};
     }
   }
+  
+  /// Get all available activities
+  static Future<Map<String, dynamic>> getAllActivities() async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/activity_api.php?action=list'),
+        headers: {'Content-Type': 'application/json'},
+      ).timeout(const Duration(seconds: 30));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        return {
+          'success': false,
+          'message': 'Failed to fetch activities'
+        };
+      }
+    } catch (e) {
+      return {
+        'success': false,
+        'message': 'Connection error: $e'
+      };
+    }
+  }
+  
+  /// Enroll child in an activity
+  static Future<Map<String, dynamic>> enrollChildInActivity(int activityId, int childId) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/activity_api.php?action=enroll_child'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'activity_id': activityId,
+          'child_id': childId,
+        }),
+      ).timeout(const Duration(seconds: 30));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        return {
+          'success': false,
+          'message': 'Failed to enroll child'
+        };
+      }
+    } catch (e) {
+      return {
+        'success': false,
+        'message': 'Connection error: $e'
+      };
+    }
+  }
+  
+  /// Unenroll child from an activity
+  static Future<Map<String, dynamic>> unenrollChildFromActivity(int activityId, int childId) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/activity_api.php?action=unenroll_child'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'activity_id': activityId,
+          'child_id': childId,
+        }),
+      ).timeout(const Duration(seconds: 30));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        return {
+          'success': false,
+          'message': 'Failed to unenroll child'
+        };
+      }
+    } catch (e) {
+      return {
+        'success': false,
+        'message': 'Connection error: $e'
+      };
+    }
+  }
 }

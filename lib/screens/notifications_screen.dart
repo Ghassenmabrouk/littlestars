@@ -344,6 +344,11 @@ class NotificationCard extends StatelessWidget {
     final now = DateTime.now();
     final difference = now.difference(dateTime);
 
+    // Handle future dates (timezone issues, etc.)
+    if (difference.isNegative) {
+      return 'À l\'instant';
+    }
+
     if (difference.inSeconds < 60) {
       return 'À l\'instant';
     } else if (difference.inMinutes < 60) {

@@ -28,6 +28,27 @@ class AppNotification {
         ? rawCount
         : (int.tryParse(rawCount?.toString() ?? '') ?? 1);
 
+    // Parse timestamp from various possible field names
+    DateTime? parsedDateTime;
+    final possibleTimestampFields = ['created_at', 'timestamp', 'date_created', 'createdAt', 'date'];
+
+    for (final field in possibleTimestampFields) {
+      if (json[field] != null) {
+        try {
+          if (json[field] is String) {
+            // Try parsing as ISO 8601 string
+            parsedDateTime = DateTime.parse(json[field]);
+          } else if (json[field] is int) {
+            // Try parsing as Unix timestamp (seconds)
+            parsedDateTime = DateTime.fromMillisecondsSinceEpoch(json[field] * 1000);
+          }
+          if (parsedDateTime != null) break;
+        } catch (e) {
+          print('Error parsing timestamp field "$field": $e');
+        }
+      }
+    }
+
     return AppNotification(
       id: json['id'] ?? '',
       type: json['type'] ?? 'unknown',
@@ -35,6 +56,7 @@ class AppNotification {
       message: json['message'] ?? '',
       count: parsedCount > 0 ? parsedCount : 1,
       priority: json['priority'] ?? 'medium',
+      createdAt: parsedDateTime, // Will default to DateTime.now() if null
     );
   }
 }
