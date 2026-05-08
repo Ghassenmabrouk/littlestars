@@ -350,7 +350,7 @@ class NotificationCard extends StatelessWidget {
     }
 
     if (difference.inSeconds < 60) {
-      return 'À l\'instant';
+      return '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
     } else if (difference.inMinutes < 60) {
       return 'Il y a ${difference.inMinutes}m';
     } else if (difference.inHours < 24) {

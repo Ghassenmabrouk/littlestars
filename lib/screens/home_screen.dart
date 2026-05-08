@@ -613,18 +613,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         );
                       },
                     ),
-                    _buildQuickActionCard(
-                      'Paramètres',
-                      '⚙️',
-                      Colors.purple,
-                      () => ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: const Text('Paramètres bientôt disponibles'),
-                          duration: const Duration(seconds: 10),
-                          action: SnackBarAction(label: 'Fermer', onPressed: () {}),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ],
