@@ -341,24 +341,12 @@ class NotificationCard extends StatelessWidget {
   }
 
   String _formatTime(DateTime dateTime) {
-    final now = DateTime.now();
-    final difference = now.difference(dateTime);
+    final day = dateTime.day.toString().padLeft(2, '0');
+    final month = dateTime.month.toString().padLeft(2, '0');
+    final year = dateTime.year.toString();
+    final hour = dateTime.hour.toString().padLeft(2, '0');
+    final minute = dateTime.minute.toString().padLeft(2, '0');
 
-    // Handle future dates (timezone issues, etc.)
-    if (difference.isNegative) {
-      return 'À l\'instant';
-    }
-
-    if (difference.inSeconds < 60) {
-      return '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
-    } else if (difference.inMinutes < 60) {
-      return 'Il y a ${difference.inMinutes}m';
-    } else if (difference.inHours < 24) {
-      return 'Il y a ${difference.inHours}h';
-    } else if (difference.inDays < 7) {
-      return 'Il y a ${difference.inDays}j';
-    } else {
-      return '${dateTime.day}/${dateTime.month}/${dateTime.year}';
-    }
+    return '$day/$month/$year $hour:$minute';
   }
 }
