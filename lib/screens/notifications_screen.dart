@@ -24,11 +24,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final authProvider = context.read<AuthProvider>();
       final notifProvider = context.read<NotificationProvider>();
-      print('[NotificationsScreen] Post frame callback - user: ${authProvider.user?.prenom} ${authProvider.user?.nom}');
+      print('[NotificationsScreen] Post frame callback - user: ${authProvider.user?.nomComplet}');
       if (authProvider.user != null) {
-        print('[NotificationsScreen] Fetching notifications for parent_id: ${authProvider.user!.id}');\n        notifProvider.fetchNotifications(authProvider.user!.id);
+        print('[NotificationsScreen] Fetching notifications for parent_id: ${authProvider.user!.id}');
+        notifProvider.fetchNotifications(authProvider.user!.id);
       } else {
-        print('[NotificationsScreen] No user found in auth provider');\n      }
+        print('[NotificationsScreen] No user found in auth provider');
+      }
     });
   }
   
