@@ -589,28 +589,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         );
                       },
                     ),
-                    _buildQuickActionCard(
-                      'Historique de Présence',
-                      '📅',
-                      Colors.orange,
-                      () {
-                        final childData = {
-                          'enfant_id': selectedChild.id,
-                          'id': selectedChild.id,
-                          'nom': selectedChild.nom,
-                          'prenom': selectedChild.prenom,
-                          'groupe_age': selectedChild.groupeAge,
-                          'date_naissance': selectedChild.dateNaissance,
-                          'statut': selectedChild.statut,
-                        };
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ChildDetailsScreen(child: childData),
-                          ),
-                        );
-                      },
-                    ),
                   ],
                 ),
               ],

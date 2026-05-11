@@ -35,7 +35,13 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
     _enrolledFuture = ApiService.getChildActivities(widget.childId).then((data) {
       final activities = (data['data'] as List? ?? []).cast<Map<String, dynamic>>();
       setState(() {
-        _enrolledActivityIds = activities.map<int>((a) => a['id'] as int? ?? 0).toSet();
+        // Parse id safely - handle both int and String types
+        _enrolledActivityIds = activities.map<int>((a) {
+          final idValue = a['id'];
+          if (idValue is int) return idValue;
+          if (idValue is String) return int.tryParse(idValue) ?? 0;
+          return 0;
+        }).toSet();
       });
       return data;
     });
@@ -158,7 +164,11 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
               itemCount: activities.length,
               itemBuilder: (context, index) {
                 final activity = activities[index];
-                final activityId = activity['id'] as int? ?? 0;
+                // Parse activity ID safely - handle both int and String types
+                final idValue = activity['id'];
+                final activityId = idValue is int 
+                    ? idValue 
+                    : (idValue is String ? int.tryParse(idValue) ?? 0 : 0);
                 final title = activity['titre'] ?? activity['title'] ?? 'Unknown';
                 final description = activity['description'] ?? '';
                 final type = activity['type_activite'] ?? '';
