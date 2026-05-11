@@ -1,0 +1,99 @@
+# Quick Notifications Testing Checklist
+
+## Test URLs to Check
+
+Use these in your browser to test the backend:
+
+1. **Check if parent has notifications data:**
+   ```
+   http://localhost/jardin_enfant_ghofrane/debug_notifications.php?parent_id=1
+   ```
+   Look at the `summary.total_notifications` value
+
+2. **Get notifications for parent:**
+   ```
+   http://localhost/jardin_enfant_ghofrane/notifications_api.php?parent_id=1
+   ```
+   Should return JSON with `"success": true` and `"data": [...]`
+
+3. **Check FCM diagnostics:**
+   ```
+   http://localhost/jardin_enfant_ghofrane/check_fcm_diagnostics.php
+   ```
+
+---
+
+## Console Log Patterns to Look For
+
+### ✅ **Good (Notifications are loading):**
+```
+[NotificationsScreen] Fetching notifications for parent_id: 1
+[NotificationService] Fetching notifications for parent_id: 1
+[NotificationService] Received 5 notifications
+[NotificationProvider] Received 5 notifications
+[NotificationsScreen] Build - isLoading: false, count: 5
+```
+
+### ❌ **Bad (No notifications):**
+```
+[NotificationService] Received 0 notifications
+[NotificationsScreen] Build - isLoading: false, count: 0
+```
+
+### ❌ **Bad (Error):**
+```
+[NotificationService] ERROR: Connection error
+[NotificationService] ERROR: FormatException
+[NotificationService] ERROR: type 'int' is not a subtype of type 'List'
+```
+
+---
+
+## The Problem
+
+Your app **displays nothing** when the API returns an empty list. This could mean:
+
+1. **No data in database** → Need to create messages/invoices/absences
+2. **API returns empty** → Even though data exists (database query issue)
+3. **Parsing error** → Data exists but app can't parse it
+4. **Network error** → App can't reach backend API
+
+---
+
+## How to Fix Each
+
+### **No Data in Database**
+```sql
+-- Create test message
+INSERT INTO messages (sender_id, sender_role, receiver_id, receiver_role, subject, body, created_at)
+VALUES (1, 'educateur', 1, 'parent', 'Test', 'Test message', NOW());
+```
+
+### **API Returns Empty (Data Exists)**
+Edit `notifications_api.php` - the database queries might be wrong
+
+### **Parsing Error**
+Check Firebase console logs for detailed errors
+
+### **Network Error**
+Check API base URL in app settings is correct
+
+---
+
+## What Changed in Your App
+
+1. ✅ `notification_service.dart` - Added detailed logging
+2. ✅ `notification_provider.dart` - Added detailed logging  
+3. ✅ `notifications_screen.dart` - Added refresh button + logging
+4. ✅ Created `debug_notifications.php` - Backend diagnostic tool
+5. ✅ Created `NOTIFICATIONS_DEBUGGING.md` - Full debugging guide
+
+---
+
+## Next Steps
+
+1. Open app in Flutter debug mode
+2. Go to Notifications screen
+3. Watch console for `[Notifications...]` logs
+4. Test backend API URL in browser
+5. Share console output if still not working

@@ -72,17 +72,30 @@ class NotificationService {
 
   Future<List<AppNotification>> getNotifications(int parentId) async {
     try {
+      print('[NotificationService] Fetching notifications for parent_id: $parentId');
       final response = await ApiService.getNotifications(parentId);
       
-      if (response['success'] && response['data'] is List) {
-        final notifications = (response['data'] as List)
-            .map((n) => AppNotification.fromJson(n))
-            .toList();
-        return notifications;
+      print('[NotificationService] API Response: $response');
+      
+      // Check if response is success and has data
+      if (response['success'] == true) {
+        if (response['data'] is List) {
+          final notifications = (response['data'] as List)
+              .map((n) => AppNotification.fromJson(n))
+              .toList();
+          print('[NotificationService] Parsed ${notifications.length} notifications');
+          return notifications;
+        } else {
+          print('[NotificationService] Data is not a list: ${response['data'].runtimeType}');
+          return [];
+        }
+      } else {
+        print('[NotificationService] API returned success=false or error: ${response['message'] ?? response['error'] ?? 'Unknown error'}');
+        return [];
       }
-      return [];
-    } catch (e) {
-      print('Error fetching notifications: $e');
+    } catch (e, stackTrace) {
+      print('[NotificationService] ERROR: $e');
+      print('[NotificationService] Stack trace: $stackTrace');
       return [];
     }
   }

@@ -16,6 +16,7 @@ class NotificationProvider extends ChangeNotifier {
 
   Future<void> fetchNotifications(int parentId) async {
     _isLoading = true;
+    print('[NotificationProvider] Starting fetchNotifications for parent_id: $parentId');
     // Don't notify listeners on initial load - it causes build issues
     // Only notify after the async gap
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -25,13 +26,17 @@ class NotificationProvider extends ChangeNotifier {
     try {
       final service = NotificationService();
       final notifs = await service.getNotifications(parentId);
+      print('[NotificationProvider] Received ${notifs.length} notifications');
       _notifications = service.sortByPriority(notifs);
       _lastFetch = DateTime.now();
-    } catch (e) {
-      print('Error in NotificationProvider: $e');
+      print('[NotificationProvider] Notifications sorted by priority');
+    } catch (e, stackTrace) {
+      print('[NotificationProvider] ERROR: $e');
+      print('[NotificationProvider] Stack trace: $stackTrace');
     } finally {
       _isLoading = false;
       notifyListeners();
+      print('[NotificationProvider] Notified listeners, isLoading=$_isLoading, count=${_notifications.length}');
     }
   }
 

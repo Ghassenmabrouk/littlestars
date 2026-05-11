@@ -18,14 +18,17 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   @override
   void initState() {
     super.initState();
+    print('[NotificationsScreen] initState called');
     // Auto-refresh notifications every 10 seconds when screen is active
     _startAutoRefresh();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final authProvider = context.read<AuthProvider>();
       final notifProvider = context.read<NotificationProvider>();
+      print('[NotificationsScreen] Post frame callback - user: ${authProvider.user?.prenom} ${authProvider.user?.nom}');
       if (authProvider.user != null) {
-        notifProvider.fetchNotifications(authProvider.user!.id);
-      }
+        print('[NotificationsScreen] Fetching notifications for parent_id: ${authProvider.user!.id}');\n        notifProvider.fetchNotifications(authProvider.user!.id);
+      } else {
+        print('[NotificationsScreen] No user found in auth provider');\n      }
     });
   }
   
@@ -85,6 +88,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       ),
       body: Consumer<NotificationProvider>(
         builder: (context, provider, child) {
+          print('[NotificationsScreen] Build - isLoading: ${provider.isLoading}, count: ${provider.notifications.length}');
+          
           if (provider.isLoading) {
             return const Center(
               child: CircularProgressIndicator(),
@@ -113,6 +118,17 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       fontSize: 14,
                       color: Colors.grey[500],
                     ),
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton.icon(
+                    onPressed: () async {
+                      final authProvider = context.read<AuthProvider>();
+                      if (authProvider.user != null) {
+                        await provider.fetchNotifications(authProvider.user!.id);
+                      }
+                    },
+                    icon: const Icon(Icons.refresh),
+                    label: const Text('Actualiser'),
                   ),
                 ],
               ),
