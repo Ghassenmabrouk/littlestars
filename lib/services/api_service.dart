@@ -126,6 +126,29 @@ class ApiService {
     }
   }
 
+  /// Fetch children for a parent by email
+  static Future<List<dynamic>> fetchChildrenByEmail(String parentEmail) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/get_children_by_email_api.php?parent_email=$parentEmail'),
+        headers: {'Content-Type': 'application/json'},
+      ).timeout(const Duration(seconds: 30));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data['success'] == true && data['children'] is List) {
+          return data['children'];
+        }
+        return [];
+      } else {
+        return [];
+      }
+    } catch (e) {
+      print('Error fetching children: $e');
+      return [];
+    }
+  }
+
   /// Get attendance summary
   static Future<Map<String, dynamic>> getAttendanceSummary(int childId) async {
     try {

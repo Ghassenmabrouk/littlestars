@@ -214,6 +214,17 @@ class AuthProvider extends ChangeNotifier {
     try {
       if (_user == null) return false;
       
+      // Try to reload by fetching children directly from API using email
+      final childrenData = await ApiService.fetchChildrenByEmail(_user!.email);
+      if (childrenData.isNotEmpty) {
+        _children = childrenData
+            .map((child) => Child.fromJson(child as Map<String, dynamic>))
+            .toList();
+        notifyListeners();
+        return true;
+      }
+      
+      // Fallback: try re-login if we have saved credentials
       final prefs = await SharedPreferences.getInstance();
       final savedLogin = prefs.getString('login');
       final password = prefs.getString('password');
